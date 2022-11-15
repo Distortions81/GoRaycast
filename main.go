@@ -46,20 +46,12 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	for y := 0; y < mapYSize; y++ {
-		for x := 0; x < mapXSize; x++ {
-			point := y*mapXSize + x
-			if GameMap[point] > 0 {
-				flatMap.Set(x, y, color.White)
-			}
-		}
-	}
-
 	var op *ebiten.DrawImageOptions = &ebiten.DrawImageOptions{}
 	op.GeoM.Reset()
 	op.GeoM.Scale(flatScale, flatScale)
 	fSize := float64(mapXSize * flatScale)
 	op.GeoM.Translate(float64(screenWidth)-fSize, float64(screenHeight)-fSize)
+	op.Filter = ebiten.FilterNearest
 	screen.DrawImage(flatMap, op)
 
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
@@ -73,8 +65,20 @@ func main() {
 	ebiten.SetWindowSize(screenWidth*2, screenHeight*2)
 	ebiten.SetWindowTitle("GoRaycaster")
 	flatMap = ebiten.NewImage(mapXSize, mapYSize)
+	updateFlatMap()
 	g := &Game{}
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func updateFlatMap() {
+	for y := 0; y < mapYSize; y++ {
+		for x := 0; x < mapXSize; x++ {
+			point := y*mapXSize + x
+			if GameMap[point] > 0 {
+				flatMap.Set(x, y, color.White)
+			}
+		}
 	}
 }
