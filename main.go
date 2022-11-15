@@ -17,7 +17,7 @@ const (
 	mapYSize      = 16
 	flatScale     = 4
 	drawScale     = 2
-	charMoveSpeed = ( /*blocks per second*/ 4.0 / /*tps*/ 60.0)
+	charMoveSpeed = ( /*blocks per second*/ 8.0 / /*tps*/ 60.0)
 )
 
 var GameMap = []uint8{
@@ -60,17 +60,6 @@ type Game struct {
 
 func (g *Game) Update() error {
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
-	return nil
-}
-func (g *Game) Draw(screen *ebiten.Image) {
-
-	var op *ebiten.DrawImageOptions = &ebiten.DrawImageOptions{}
-	op.GeoM.Reset()
-	op.GeoM.Scale(flatScale, flatScale)
-	op.GeoM.Translate(float64(screenWidth)-flatSize, float64(screenHeight)-flatSize)
-	op.Filter = ebiten.FilterNearest
-	screen.DrawImage(flatMap, op)
-
 	for _, p := range g.keys {
 		if p == ebiten.KeyS {
 			if playerPos.y < mapYSize {
@@ -96,6 +85,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		playerImg.Fill(color.Transparent)
 		playerImg.Set(int(playerPos.x), int(playerPos.y), color.RGBA{0xff, 0xff, 0x00, 0xff})
 	}
+	return nil
+}
+func (g *Game) Draw(screen *ebiten.Image) {
+
+	var op *ebiten.DrawImageOptions = &ebiten.DrawImageOptions{}
+	op.GeoM.Reset()
+	op.GeoM.Scale(flatScale, flatScale)
+	op.GeoM.Translate(float64(screenWidth)-flatSize, float64(screenHeight)-flatSize)
+	op.Filter = ebiten.FilterNearest
+	screen.DrawImage(flatMap, op)
 	screen.DrawImage(playerImg, op)
 
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
