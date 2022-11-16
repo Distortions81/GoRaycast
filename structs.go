@@ -7,19 +7,22 @@ import (
 )
 
 const (
-	screenWidth  = 320
-	screenHeight = 240
+	screenWidth  = 1280 / 2
+	screenHeight = 720 / 2
+	screenScale  = 2
+	mapScale     = 4
 
-	mapXSize = 16
-	mapYSize = 16
-
-	flatScale = 4
-	drawScale = 2
-
+	/* long distance run, 2.2 to 2.6m/s */
+	/* walking 1.1 to 1.7m/s */
 	charMoveSpeed = ( /*blocks per second*/ 8.0 / /*tps*/ 60.0)
 )
 
-var cYellow = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
+var (
+	cYellow = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
+	cRed    = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
+
+	mapSize ixycord
+)
 
 type Game struct {
 	keys []ebiten.Key
@@ -34,10 +37,8 @@ type ixycord struct {
 	y int
 }
 
-var flatMap *ebiten.Image
+var mapImg *ebiten.Image
 var playerImg *ebiten.Image
-
-var flatSize float64
 
 var playerPos xycord
 var oldPlayerPos xycord

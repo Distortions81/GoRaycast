@@ -11,24 +11,25 @@ import (
 )
 
 func (g *Game) Update() error {
-	oldPlayerPos.x = playerPos.x
-	oldPlayerPos.y = playerPos.y
+	oldPlayerPos = playerPos
 
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
 
+	pad := float64(1.0 / mapScale)
 	for _, p := range g.keys {
 		switch p {
 		case ebiten.KeyS:
-			if playerPos.y < mapYSize-1 {
+			if playerPos.y < float64(mapSize.y)-pad {
 				playerPos.y += charMoveSpeed
 			}
+
 		case ebiten.KeyW:
 			if playerPos.y > 0 {
 				playerPos.y -= charMoveSpeed
 			}
 
 		case ebiten.KeyD:
-			if playerPos.x < mapXSize-1 {
+			if playerPos.x < float64(mapSize.x)-pad {
 				playerPos.x += charMoveSpeed
 			}
 		case ebiten.KeyA:
@@ -37,9 +38,9 @@ func (g *Game) Update() error {
 			}
 		}
 	}
-	if int(oldPlayerPos.x) != int(playerPos.x) || int(oldPlayerPos.y) != int(playerPos.y) {
+	if oldPlayerPos != playerPos {
 		playerImg.Fill(color.Transparent)
-		playerImg.Set(int(playerPos.x), int(playerPos.y), cYellow)
+		playerImg.Set(int(playerPos.x*mapScale), int(playerPos.y*mapScale), cYellow)
 	}
 	return nil
 }
@@ -47,10 +48,14 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	var op *ebiten.DrawImageOptions = &ebiten.DrawImageOptions{}
 	op.GeoM.Reset()
-	op.GeoM.Scale(flatScale, flatScale)
-	op.GeoM.Translate(float64(screenWidth)-flatSize, float64(screenHeight)-flatSize)
+	op.GeoM.Scale(mapScale, mapScale)
+	op.GeoM.Translate(float64(screenWidth-mapSize.x*mapScale), float64(screenHeight-mapSize.y*mapScale))
 	op.Filter = ebiten.FilterNearest
-	screen.DrawImage(flatMap, op)
+	screen.DrawImage(mapImg, op)
+
+	op.GeoM.Reset()
+	op.GeoM.Translate(float64(screenWidth-mapSize.x*mapScale), float64(screenHeight-mapSize.y*mapScale))
+	op.Filter = ebiten.FilterNearest
 	screen.DrawImage(playerImg, op)
 
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
@@ -61,35 +66,25 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
+	var err error
 	playerPos.x = 1
 	playerPos.y = 1
 
-	ebiten.SetWindowSize(screenWidth*drawScale, screenHeight*drawScale)
+	ebiten.SetWindowSize(screenWidth*screenScale, screenHeight*screenScale)
 	ebiten.SetWindowTitle("GoRaycaster")
 
-	//ebiten.SetWindowResizable(true)
-	flatMap = ebiten.NewImage(mapXSize, mapYSize)
-	playerImg = ebiten.NewImage(mapXSize, mapYSize)
+	mapImg, _, err = ebitenutil.NewImageFromFile("map1.png")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	/* Init player position */
-	playerImg.Fill(color.Transparent)
-	playerImg.Set(int(playerPos.x), int(playerPos.y), cYellow)
+	mapSize.x, mapSize.y = mapImg.Size()
+	playerImg = ebiten.NewImage(mapSize.x*mapScale, mapSize.y*mapScale)
+	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 
-	updateFlatMap()
 	g := &Game{}
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
-	}
-}
-
-func updateFlatMap() {
-	flatSize = float64(mapXSize * flatScale)
-	for y := 0; y < mapYSize; y++ {
-		for x := 0; x < mapXSize; x++ {
-			point := y*mapXSize + x
-			if GameMap[point] > 0 {
-				flatMap.Set(x, y, color.White)
-			}
-		}
 	}
 }
