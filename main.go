@@ -10,55 +10,6 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
-const (
-	screenWidth   = 320
-	screenHeight  = 240
-	mapXSize      = 16
-	mapYSize      = 16
-	flatScale     = 4
-	drawScale     = 2
-	charMoveSpeed = ( /*blocks per second*/ 8.0 / /*tps*/ 60.0)
-)
-
-var GameMap = []uint8{
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-}
-
-var flatMap *ebiten.Image
-var playerImg *ebiten.Image
-var flatSize float64
-
-type xycord struct {
-	x float64
-	y float64
-}
-type ixycord struct {
-	x int
-	y int
-}
-
-var playerPos xycord
-var oldPlayerPos xycord
-
-type Game struct {
-	keys []ebiten.Key
-}
-
 func (g *Game) Update() error {
 	oldPlayerPos.x = playerPos.x
 	oldPlayerPos.y = playerPos.y
@@ -68,7 +19,7 @@ func (g *Game) Update() error {
 	for _, p := range g.keys {
 		switch p {
 		case ebiten.KeyS:
-			if playerPos.y < mapYSize {
+			if playerPos.y < mapYSize-1 {
 				playerPos.y += charMoveSpeed
 			}
 		case ebiten.KeyW:
@@ -77,7 +28,7 @@ func (g *Game) Update() error {
 			}
 
 		case ebiten.KeyD:
-			if playerPos.x < mapXSize {
+			if playerPos.x < mapXSize-1 {
 				playerPos.x += charMoveSpeed
 			}
 		case ebiten.KeyA:
@@ -88,7 +39,7 @@ func (g *Game) Update() error {
 	}
 	if int(oldPlayerPos.x) != int(playerPos.x) || int(oldPlayerPos.y) != int(playerPos.y) {
 		playerImg.Fill(color.Transparent)
-		playerImg.Set(int(playerPos.x), int(playerPos.y), color.RGBA{0xff, 0xff, 0x00, 0xff})
+		playerImg.Set(int(playerPos.x), int(playerPos.y), cYellow)
 	}
 	return nil
 }
@@ -115,13 +66,14 @@ func main() {
 
 	ebiten.SetWindowSize(screenWidth*drawScale, screenHeight*drawScale)
 	ebiten.SetWindowTitle("GoRaycaster")
+
 	//ebiten.SetWindowResizable(true)
 	flatMap = ebiten.NewImage(mapXSize, mapYSize)
 	playerImg = ebiten.NewImage(mapXSize, mapYSize)
 
 	/* Init player position */
 	playerImg.Fill(color.Transparent)
-	playerImg.Set(int(playerPos.x), int(playerPos.y), color.RGBA{0xff, 0xff, 0x00, 0xff})
+	playerImg.Set(int(playerPos.x), int(playerPos.y), cYellow)
 
 	updateFlatMap()
 	g := &Game{}
