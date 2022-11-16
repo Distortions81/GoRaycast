@@ -53,35 +53,40 @@ type ixycord struct {
 }
 
 var playerPos xycord
+var oldPlayerPos xycord
 
 type Game struct {
 	keys []ebiten.Key
 }
 
 func (g *Game) Update() error {
+	oldPlayerPos.x = playerPos.x
+	oldPlayerPos.y = playerPos.y
+
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
+
 	for _, p := range g.keys {
-		if p == ebiten.KeyS {
+		switch p {
+		case ebiten.KeyS:
 			if playerPos.y < mapYSize {
 				playerPos.y += charMoveSpeed
 			}
-		}
-		if p == ebiten.KeyW {
+		case ebiten.KeyW:
 			if playerPos.y > 0 {
 				playerPos.y -= charMoveSpeed
 			}
-		}
-		if p == ebiten.KeyD {
+
+		case ebiten.KeyD:
 			if playerPos.x < mapXSize {
 				playerPos.x += charMoveSpeed
 			}
-		}
-		if p == ebiten.KeyA {
+		case ebiten.KeyA:
 			if playerPos.x > 0 {
 				playerPos.x -= charMoveSpeed
 			}
 		}
-
+	}
+	if int(oldPlayerPos.x) != int(playerPos.x) || int(oldPlayerPos.y) != int(playerPos.y) {
 		playerImg.Fill(color.Transparent)
 		playerImg.Set(int(playerPos.x), int(playerPos.y), color.RGBA{0xff, 0xff, 0x00, 0xff})
 	}
@@ -105,11 +110,19 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
+	playerPos.x = 1
+	playerPos.y = 1
+
 	ebiten.SetWindowSize(screenWidth*drawScale, screenHeight*drawScale)
 	ebiten.SetWindowTitle("GoRaycaster")
 	//ebiten.SetWindowResizable(true)
 	flatMap = ebiten.NewImage(mapXSize, mapYSize)
 	playerImg = ebiten.NewImage(mapXSize, mapYSize)
+
+	/* Init player position */
+	playerImg.Fill(color.Transparent)
+	playerImg.Set(int(playerPos.x), int(playerPos.y), color.RGBA{0xff, 0xff, 0x00, 0xff})
+
 	updateFlatMap()
 	g := &Game{}
 	if err := ebiten.RunGame(g); err != nil {
