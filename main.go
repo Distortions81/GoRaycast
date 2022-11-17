@@ -13,7 +13,7 @@ func main() {
 	playerPos.x = 1
 	playerPos.y = 1
 
-	ebiten.SetWindowSize(screenWidth*screenScale, screenHeight*screenScale)
+	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("GoRaycaster")
 
 	mapImg, _, err = ebitenutil.NewImageFromFile("map1.png")
@@ -22,8 +22,16 @@ func main() {
 		return
 	}
 
-	mapSize.x, mapSize.y = mapImg.Size()
-	playerImg = ebiten.NewImage(mapSize.x*mapScale, mapSize.y*mapScale)
+	screenCenter.x = screenWidth / 2
+	screenCenter.y = screenHeight / 2
+
+	lineImg = ebiten.NewImage(1, 1)
+	lineImg.Fill(cYellow)
+
+	xs, ys := mapImg.Size()
+	mapSize.x = float64(xs)
+	mapSize.y = float64(ys)
+
 	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 
 	g := &Game{}

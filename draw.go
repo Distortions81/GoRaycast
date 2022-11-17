@@ -13,17 +13,12 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 
-	var op *ebiten.DrawImageOptions = &ebiten.DrawImageOptions{}
+	op := &ebiten.DrawImageOptions{Filter: ebiten.FilterLinear}
 	op.GeoM.Reset()
-	op.GeoM.Scale(mapScale, mapScale)
-	op.GeoM.Translate(float64(screenWidth-mapSize.x*mapScale), float64(screenHeight-mapSize.y*mapScale))
-	op.Filter = ebiten.FilterNearest
-	screen.DrawImage(mapImg, op)
-
-	op.GeoM.Reset()
-	op.GeoM.Translate(float64(screenWidth-mapSize.x*mapScale), float64(screenHeight-mapSize.y*mapScale))
-	op.Filter = ebiten.FilterNearest
-	screen.DrawImage(playerImg, op)
-
+	op.GeoM.Scale(15, 2)
+	op.GeoM.Rotate(playerRot)
+	op.GeoM.Rotate(halfPi)
+	op.GeoM.Translate((playerPos.x * screenScale), (playerPos.y * screenScale))
+	screen.DrawImage(lineImg, op)
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }

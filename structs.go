@@ -2,26 +2,40 @@ package main
 
 import (
 	"image/color"
+	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 const (
-	screenWidth  = 1280 / 2
-	screenHeight = 720 / 2
-	screenScale  = 2
-	mapScale     = 4
+	screenWidth    = 1280 / 2
+	screenHeight   = 720 / 2
+	screenScale    = 10
+	playerRotSpeed = 0.1
+	twoPi          = math.Pi * 2.0
+	onePi          = math.Pi
+	halfPi         = math.Pi / 2.0
+	quarterPi      = math.Pi / 4.0
 
 	/* long distance run, 2.2 to 2.6m/s */
 	/* walking 1.1 to 1.7m/s */
-	charMoveSpeed = ( /*blocks per second*/ 8.0 / /*tps*/ 60.0)
+	playerMoveSpeed = ( /*blocks per second*/ 1.0 / /*tps*/ 60.0)
 )
 
 var (
+	screenCenter xycord
+
 	cYellow = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed    = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 
-	mapSize ixycord
+	mapSize xycord
+
+	mapImg  *ebiten.Image
+	lineImg *ebiten.Image
+
+	playerPos  xycord
+	playerRot  float64
+	playerPosR xycord
 )
 
 type Game struct {
@@ -36,9 +50,3 @@ type ixycord struct {
 	x int
 	y int
 }
-
-var mapImg *ebiten.Image
-var playerImg *ebiten.Image
-
-var playerPos xycord
-var oldPlayerPos xycord
