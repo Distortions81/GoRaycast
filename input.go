@@ -16,26 +16,28 @@ func (g *Game) Update() error {
 	for _, p := range g.keys {
 		switch p {
 		case ebiten.KeyW:
-			playerPos.y += playerPosR.x
-			playerPos.x += playerPosR.y
+			playerPhysics.Position.y += playerPhysics.MovePos.x
+			playerPhysics.Position.x += playerPhysics.MovePos.y
 		case ebiten.KeyS:
-			playerPos.y -= playerPosR.x
-			playerPos.x -= playerPosR.y
+			playerPhysics.Position.y -= playerPhysics.MovePos.x
+			playerPhysics.Position.x -= playerPhysics.MovePos.y
 		case ebiten.KeyD:
-			playerRot += playerRotSpeed
-			if playerRot > twoPi {
-				playerRot -= twoPi
-			}
-			playerPosR.x = math.Cos(playerRot)
-			playerPosR.y = -math.Sin(playerRot)
+			playerPhysics.Rotation += playerRotSpeed
+			angleCalc()
 		case ebiten.KeyA:
-			playerRot -= playerRotSpeed
-			if playerRot > twoPi {
-				playerRot -= twoPi
-			}
-			playerPosR.x = math.Cos(playerRot)
-			playerPosR.y = -math.Sin(playerRot)
+			playerPhysics.Rotation -= playerRotSpeed
+			angleCalc()
 		}
 	}
 	return nil
+}
+
+func angleCalc() {
+	if playerPhysics.Rotation > twoPi {
+		playerPhysics.Rotation -= twoPi
+	} else if playerPhysics.Rotation < 0 {
+		playerPhysics.Rotation += twoPi
+	}
+	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
+	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
 }

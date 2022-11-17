@@ -11,8 +11,8 @@ import (
 
 func main() {
 	var err error
-	playerPos.x = 1
-	playerPos.y = 1
+	playerPhysics.Position.x = 1
+	playerPhysics.Position.y = 1
 
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("GoRaycaster")
@@ -33,8 +33,8 @@ func main() {
 	mapSize.x = float64(xs)
 	mapSize.y = float64(ys)
 
-	playerPosR.x = math.Cos(playerRot)
-	playerPosR.y = -math.Sin(playerRot)
+	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
+	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
 
 	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 

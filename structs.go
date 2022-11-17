@@ -33,10 +33,15 @@ var (
 	mapImg  *ebiten.Image
 	lineImg *ebiten.Image
 
-	playerPos  xycord
-	playerRot  float64
-	playerPosR xycord
+	playerPhysics pPhysics
 )
+
+type pPhysics struct {
+	Position xycord
+	Rotation float64
+	MovePos  xycord
+	
+}
 
 type Game struct {
 	keys []ebiten.Key
@@ -45,8 +50,4 @@ type Game struct {
 type xycord struct {
 	x float64
 	y float64
-}
-type ixycord struct {
-	x int
-	y int
 }
