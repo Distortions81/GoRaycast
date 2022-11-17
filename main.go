@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -31,6 +32,9 @@ func main() {
 	xs, ys := mapImg.Size()
 	mapSize.x = float64(xs)
 	mapSize.y = float64(ys)
+
+	playerPosR.x = math.Cos(playerRot)
+	playerPosR.y = -math.Sin(playerRot)
 
 	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 
