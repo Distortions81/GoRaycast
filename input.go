@@ -9,6 +9,8 @@ import (
 
 func (g *Game) Update() error {
 
+	playerRotSpeed = 10.0 / ebiten.ActualFPS()
+
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
 
 	for _, p := range g.keys {
