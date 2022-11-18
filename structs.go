@@ -28,9 +28,11 @@ var (
 
 	mapSize xycord
 
-	mapImg  *ebiten.Image
-	lineImg *ebiten.Image
-	wallImg *ebiten.Image
+	mapImg    *ebiten.Image
+	mapRender *ebiten.Image
+	mapDirty  bool = true
+	lineImg   *ebiten.Image
+	wallImg   *ebiten.Image
 
 	playerPhysics pPhysics
 )

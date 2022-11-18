@@ -34,6 +34,8 @@ func main() {
 	mapSize.x = float64(xs)
 	mapSize.y = float64(ys)
 
+	mapRender = ebiten.NewImage(xs*screenScale, ys*screenScale)
+
 	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
 	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
 
