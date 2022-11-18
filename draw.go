@@ -33,21 +33,22 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	rayAngle := playerPhysics.Rotation
 	var rayPos xycord
 	var offset xycord
+	quant := 1.0001
 	for rayNum := 0; rayNum < 1; rayNum++ {
 		/* Check Horizontal Lines */
 		dof := 0
 		aTan := -1 / math.Tan(rayAngle)
 		if rayAngle > onePi {
-			rayPos.y = math.Floor(playerPhysics.Position.y)
-			rayPos.x = math.Floor((playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x)
-			offset.y = 0
+			rayPos.y = math.Floor(playerPhysics.Position.y) - 0.0001
+			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x
+			offset.y = -quant
 			offset.x = -offset.y * aTan
 		} else if rayAngle < onePi {
-			rayPos.y = math.Floor(playerPhysics.Position.y)
-			rayPos.x = math.Floor((playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x)
-			offset.y = 0
+			rayPos.y = math.Floor(playerPhysics.Position.y) + quant
+			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x
+			offset.y = quant
 			offset.x = -offset.y * aTan
-		} else {
+		} else if rayAngle == 0 || rayAngle == onePi {
 			rayPos.x = playerPhysics.Position.x
 			rayPos.y = playerPhysics.Position.y
 			dof = 8

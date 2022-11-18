@@ -13,6 +13,7 @@ func main() {
 	var err error
 	playerPhysics.Position.x = 2
 	playerPhysics.Position.y = 2
+	playerPhysics.Rotation = onePi
 
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("GoRaycaster")

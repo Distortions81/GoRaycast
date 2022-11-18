@@ -13,6 +13,7 @@ const (
 	screenScale        = 64
 	playerRotSpeed     = 1.0
 	playerForwardSpeed = 10
+	threePi            = math.Pi * 3.0
 	twoPi              = math.Pi * 2.0
 	onePi              = math.Pi
 	halfPi             = math.Pi / 2.0
