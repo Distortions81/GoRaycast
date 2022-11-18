@@ -11,7 +11,7 @@ const (
 	screenWidth        = 1024
 	screenHeight       = 1024
 	screenScale        = 64
-	playerRotSpeed     = 5.0
+	playerRotSpeed     = 1.0
 	playerForwardSpeed = 10
 	twoPi              = math.Pi * 2.0
 	onePi              = math.Pi

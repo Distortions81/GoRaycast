@@ -39,12 +39,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		aTan := -1 / math.Tan(rayAngle)
 		if rayAngle > onePi {
 			rayPos.y = math.Floor(playerPhysics.Position.y)
-			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x
+			rayPos.x = math.Floor((playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x)
 			offset.y = 0
 			offset.x = -offset.y * aTan
 		} else if rayAngle < onePi {
 			rayPos.y = math.Floor(playerPhysics.Position.y)
-			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.y
+			rayPos.x = math.Floor((playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x)
 			offset.y = 0
 			offset.x = -offset.y * aTan
 		} else {
@@ -53,15 +53,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			dof = 8
 		}
 		for dof < 8 {
-			if rayPos.x >= 0 && rayPos.x <= float64(mapSize.x) &&
-				rayPos.y >= 0 && rayPos.y <= float64(mapSize.y) {
+			if rayPos.x > 0 && rayPos.x < float64(mapSize.x) &&
+				rayPos.y > 0 && rayPos.y < float64(mapSize.y) {
 				red, green, blue, alpha := mapImg.At(int(rayPos.x), int(rayPos.y)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
 					dof = 8
+					ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, math.Floor(rayPos.x)*screenScale, math.Floor(rayPos.y)*screenScale, cRed)
 				} else {
 					/* next line */
-					rayPos.x += offset.x
-					rayPos.y += offset.y
+					rayPos.x += playerPhysics.MovePos.x
+					rayPos.y += playerPhysics.MovePos.y
 					dof += 1
 				}
 			} else {
@@ -69,7 +70,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			}
 		}
 	}
-	ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, rayPos.x*screenScale, rayPos.y*screenScale, cRed)
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }
 
