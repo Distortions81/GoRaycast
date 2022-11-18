@@ -37,12 +37,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		/* Check Horizontal Lines */
 		if sinRayAngle > 0.001 {
-			rayPos.y = float64(int(playerPhysics.Position.y)/mapScale)*mapScale - 0.0001
+			rayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale - 0.0001
 			rayPos.x = (playerPhysics.Position.y-rayPos.y)*iTanRayAngle + playerPhysics.Position.x
 			offset.y = -mapScale
 			offset.x = -offset.y * iTanRayAngle
 		} else if sinRayAngle < -0.001 {
-			rayPos.y = float64(int(playerPhysics.Position.y)/mapScale)*mapScale + mapScale
+			rayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale + mapScale
 			rayPos.x = (playerPhysics.Position.y-rayPos.y)*iTanRayAngle + playerPhysics.Position.x
 			offset.y = mapScale
 			offset.x = -offset.y * iTanRayAngle
