@@ -33,7 +33,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	rayAngle := playerPhysics.Rotation
 	var rayPos xycord
 	var offset xycord
-	quant := 1.0001
+	quant := 1.0000
 	for rayNum := 0; rayNum < 1; rayNum++ {
 		/* Check Horizontal Lines */
 		dof := 0
