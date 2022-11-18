@@ -34,7 +34,7 @@ func main() {
 
 	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
 	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
-	miniMapOffsetX = float64(screenWidth*screenMag) - (float64(xs * mapScale))
+	miniMapOffsetX = 0 //float64(screenWidth*screenMag) - (float64(xs * mapScale))
 
 	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 
@@ -50,4 +50,8 @@ func degToRad(deg float64) float64 {
 
 func fixRad(rad float64) float64 {
 	return rad - twoPi*math.Floor((rad+onePi)/twoPi)
+}
+
+func distance(a, b xycord) float64 {
+	return math.Hypot(float64(a.x-b.x), float64(a.y-b.y))
 }
