@@ -20,62 +20,103 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	/*Draw walls */
 	renderMap()
+	op.GeoM.Translate(miniMapOffsetX, 0)
 	screen.DrawImage(mapRender, op)
 
 	/* Draw rays */
-	//rayAngle := playerPhysics.Rotation
-	sinRayAngle := math.Sin(playerPhysics.Rotation)
-	//cosRayAngle := math.Cos(playerPhysics.Rotation)
-	tanRayAngle := math.Tan(playerPhysics.Rotation)
-	iTanRayAngle := 1.0 / tanRayAngle
-
-	var rayPos xycord
+	var vrayPos xycord
+	var hrayPos xycord
 	var offset xycord
 
-	for rayNum := 0; rayNum < 320; rayNum++ {
+	rayAngle := fixRad(playerPhysics.Rotation + halfRenderRad)
+	radPerRay := degToRad(renderAngle / numRays)
+	for rayNum := 0; rayNum < numRays; rayNum++ {
 		dof := 0
+		sinRayAngle := math.Sin(rayAngle)
+		//cosRayAngle := math.Cos(rayAngle)
+		tanRayAngle := math.Tan(rayAngle)
+		iTanRayAngle := 1.0 / tanRayAngle
+		//nTanRayAngle := -tanRayAngle
 
-		/* Check Horizontal Lines */
-		if sinRayAngle > 0.001 {
-			rayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale - 0.0001
-			rayPos.x = (playerPhysics.Position.y-rayPos.y)*iTanRayAngle + playerPhysics.Position.x
-			offset.y = -mapScale
-			offset.x = -offset.y * iTanRayAngle
-		} else if sinRayAngle < -0.001 {
-			rayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale + mapScale
-			rayPos.x = (playerPhysics.Position.y-rayPos.y)*iTanRayAngle + playerPhysics.Position.x
+		/* Check Vertical Lines */
+		if sinRayAngle > 0.001 { //Look left
+			vrayPos.x = (math.Floor(playerPhysics.Position.x)/mapScale)*mapScale - 0.0001
+			vrayPos.y = (playerPhysics.Position.x-vrayPos.x)*tanRayAngle + playerPhysics.Position.y
 			offset.y = mapScale
-			offset.x = -offset.y * iTanRayAngle
+			offset.x = -offset.x * tanRayAngle
+		} else if sinRayAngle < -0.001 { //Look right
+			vrayPos.x = (math.Floor(playerPhysics.Position.x)/mapScale)*mapScale + mapScale
+			vrayPos.y = (playerPhysics.Position.x-vrayPos.x)*tanRayAngle + playerPhysics.Position.y
+			offset.x = -mapScale
+			offset.y = -offset.x * tanRayAngle
 		} else {
-			rayPos.x = playerPhysics.Position.x
-			rayPos.y = playerPhysics.Position.y
+			vrayPos.x = playerPhysics.Position.x
+			vrayPos.y = playerPhysics.Position.y
 			dof = maxDof
 		}
 		for dof < maxDof {
-			if rayPos.x > 0 && rayPos.x < float64(mapSize.x*mapScale) &&
-				rayPos.y > 0 && rayPos.y < float64(mapSize.y*mapScale) {
-				red, green, blue, alpha := mapImg.At(int(rayPos.x/mapScale), int(rayPos.y/mapScale)).RGBA()
+			if vrayPos.x > 0 && vrayPos.x < float64(mapSize.x*mapScale) &&
+				vrayPos.y > 0 && vrayPos.y < float64(mapSize.y*mapScale) {
+				red, green, blue, alpha := mapImg.At(int(vrayPos.x/mapScale), int(vrayPos.y/mapScale)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
-					ebitenutil.DrawLine(screen, playerPhysics.Position.x, playerPhysics.Position.y, rayPos.x, rayPos.y, cRed)
+					ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cGreen)
 					dof = maxDof
 				} else {
 					/* next line */
-					rayPos.x += playerPhysics.MovePos.x
-					rayPos.y += playerPhysics.MovePos.y
+					vrayPos.x += playerPhysics.MovePos.x
+					vrayPos.y += playerPhysics.MovePos.y
+
 					dof += 1
 				}
 			} else {
 				dof = maxDof /* edge of map */
 			}
 		}
+
+		/* Check Horizontal Lines */
+		dof = 0
+		if sinRayAngle > 0.001 { //Look north
+			hrayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale - 0.0001
+			hrayPos.x = (playerPhysics.Position.y-hrayPos.y)*iTanRayAngle + playerPhysics.Position.x
+			offset.y = -mapScale
+			offset.x = -offset.y * iTanRayAngle
+		} else if sinRayAngle < -0.001 { //Look south
+			hrayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale + mapScale
+			hrayPos.x = (playerPhysics.Position.y-hrayPos.y)*iTanRayAngle + playerPhysics.Position.x
+			offset.y = mapScale
+			offset.x = -offset.y * iTanRayAngle
+		} else {
+			hrayPos.x = playerPhysics.Position.x
+			hrayPos.y = playerPhysics.Position.y
+			dof = maxDof
+		}
+		for dof < maxDof {
+			if hrayPos.x > 0 && hrayPos.x < float64(mapSize.x*mapScale) &&
+				hrayPos.y > 0 && hrayPos.y < float64(mapSize.y*mapScale) {
+				red, green, blue, alpha := mapImg.At(int(hrayPos.x/mapScale), int(hrayPos.y/mapScale)).RGBA()
+				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
+					ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+hrayPos.x, hrayPos.y, cRed)
+					dof = maxDof
+				} else {
+					/* next line */
+					hrayPos.x += playerPhysics.MovePos.x
+					hrayPos.y += playerPhysics.MovePos.y
+
+					dof += 1
+				}
+			} else {
+				dof = maxDof /* edge of map */
+			}
+		}
+		rayAngle = fixRad(rayAngle - radPerRay)
 	}
 
 	/* Draw Player */
 	ebitenutil.DrawLine(screen,
-		playerPhysics.Position.x, playerPhysics.Position.y,
-		playerPhysics.Position.x+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y+playerPhysics.MovePos.y*playerLineLen,
+		miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y,
+		miniMapOffsetX+playerPhysics.Position.x+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y+playerPhysics.MovePos.y*playerLineLen,
 		cYellow)
-	ebitenutil.DrawCircle(screen, playerPhysics.Position.x, playerPhysics.Position.y, playerCircleCir, cYellow)
+	ebitenutil.DrawCircle(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, playerCircleCir, cYellow)
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }
 

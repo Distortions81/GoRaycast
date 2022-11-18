@@ -34,6 +34,7 @@ func main() {
 
 	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
 	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
+	miniMapOffsetX = float64(screenWidth*screenMag) - (float64(xs * mapScale))
 
 	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 
@@ -41,4 +42,12 @@ func main() {
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func degToRad(deg float64) float64 {
+	return fixRad(deg * onePi / 180.0)
+}
+
+func fixRad(rad float64) float64 {
+	return rad - twoPi*math.Floor((rad+onePi)/twoPi)
 }

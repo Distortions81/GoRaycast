@@ -33,11 +33,7 @@ func (g *Game) Update() error {
 }
 
 func angleCalc() {
-	if playerPhysics.Rotation > twoPi {
-		playerPhysics.Rotation -= twoPi
-	} else if playerPhysics.Rotation < 0 {
-		playerPhysics.Rotation += twoPi
-	}
+	playerPhysics.Rotation = fixRad(playerPhysics.Rotation)
 	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)  // opposite
 	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation) // adjacent
 }

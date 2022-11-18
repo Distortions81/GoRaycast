@@ -8,10 +8,13 @@ import (
 )
 
 const (
-	screenWidth           = 512
-	screenHeight          = 512
-	screenMag             = 2
-	mapScale              = 32
+	numRays               = 1
+	renderAngle           = 0
+	halfRenderAngle       = renderAngle / 2
+	screenWidth           = 1280
+	screenHeight          = 800
+	screenMag             = 1
+	mapScale              = 16
 	playerLineLen         = 16
 	playerCircleCir       = 4
 	playerRotSpeed        = 2
@@ -27,9 +30,13 @@ const (
 )
 
 var (
-	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
-	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
-	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
+	halfRenderRad  = degToRad(halfRenderAngle)
+	rayRads        = degToRad(renderAngle / screenWidth)
+	miniMapOffsetX float64
+	cDarkGray      = color.RGBA{0x20, 0x20, 0x20, 0xFF}
+	cYellow        = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
+	cRed           = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
+	cGreen         = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
 
 	mapSize ixycord
 
