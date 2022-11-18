@@ -22,29 +22,29 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	renderMap()
 	screen.DrawImage(mapRender, op)
 
-	/* Draw Player */
-	ebitenutil.DrawLine(screen,
-		playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale,
-		playerPhysics.Position.x*screenScale+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y*screenScale+playerPhysics.MovePos.y*playerLineLen,
-		cYellow)
-	ebitenutil.DrawCircle(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, playerCircleCir, cYellow)
-
 	/* Draw rays */
 	rayAngle := playerPhysics.Rotation
 	var rayPos xycord
 	var offset xycord
-	quant := 1.0000
-	for rayNum := 0; rayNum < 1; rayNum++ {
+	quant := 1.0
+	for rayNum := 0; rayNum < 30; rayNum++ {
 		/* Check Horizontal Lines */
 		dof := 0
+		rayAngle = (rayAngle - 0.523599) + (float64(rayNum) * 0.0349066)
+		if rayAngle > twoPi {
+			rayAngle -= twoPi
+		} else if rayAngle < 0 {
+			rayAngle += twoPi
+		}
+
 		aTan := -1 / math.Tan(rayAngle)
 		if rayAngle > onePi {
-			rayPos.y = math.Floor(playerPhysics.Position.y) - 0.0001
+			rayPos.y = playerPhysics.Position.y + quant
 			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x
 			offset.y = -quant
 			offset.x = -offset.y * aTan
 		} else if rayAngle < onePi {
-			rayPos.y = math.Floor(playerPhysics.Position.y) + quant
+			rayPos.y = playerPhysics.Position.y - quant
 			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x
 			offset.y = quant
 			offset.x = -offset.y * aTan
@@ -58,8 +58,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				rayPos.y > 0 && rayPos.y < float64(mapSize.y) {
 				red, green, blue, alpha := mapImg.At(int(rayPos.x), int(rayPos.y)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
+					ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, rayPos.x*screenScale, rayPos.y*screenScale, cRed)
 					dof = maxDof
-					ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, math.Floor(rayPos.x)*screenScale, math.Floor(rayPos.y)*screenScale, cRed)
+					break
 				} else {
 					/* next line */
 					rayPos.x += playerPhysics.MovePos.x
@@ -71,6 +72,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			}
 		}
 	}
+
+	/* Draw Player */
+	ebitenutil.DrawLine(screen,
+		playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale,
+		playerPhysics.Position.x*screenScale+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y*screenScale+playerPhysics.MovePos.y*playerLineLen,
+		cYellow)
+	ebitenutil.DrawCircle(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, playerCircleCir, cYellow)
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }
 
