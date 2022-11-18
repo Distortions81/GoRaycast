@@ -31,7 +31,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	var rayPos xycord
 	var offset xycord
-	for rayNum := 0; rayNum < 1; rayNum++ {
+	
+	for rayNum := 0; rayNum < 320; rayNum++ {
 		dof := 0
 
 		/* Check Horizontal Lines */

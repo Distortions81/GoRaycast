@@ -10,11 +10,12 @@ import (
 const (
 	screenWidth           = 1024
 	screenHeight          = 1024
+	screenMag             = 1
 	mapScale              = 64
 	playerLineLen         = 32
 	playerCircleCir       = 8
 	playerRotSpeed        = 2
-	playerForwardSpeedDiv = 0.25
+	playerForwardSpeedDiv = 1
 	threePi               = math.Pi * 3.0
 	twoPi                 = math.Pi * 2.0
 	onePi                 = math.Pi
