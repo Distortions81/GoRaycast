@@ -31,8 +31,8 @@ func main() {
 	wallImg.Fill(color.White)
 
 	xs, ys := mapImg.Size()
-	mapSize.x = float64(xs)
-	mapSize.y = float64(ys)
+	mapSize.x = xs
+	mapSize.y = ys
 
 	mapRender = ebiten.NewImage(xs*screenScale, ys*screenScale)
 

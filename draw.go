@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"image/color"
+	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -29,8 +30,48 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(lineImg, op)
 
 	/* Draw rays */
-	//
+	rayAngle := playerPhysics.Rotation
+	var rayPos xycord
+	var offset xycord
+	for rayNum := 0; rayNum < 1; rayNum++ {
+		/* Check Horizontal Lines */
+		dof := 0
+		arcTan := math.Atan(rayAngle)
+		if rayAngle > onePi {
+			rayPos.y = math.Floor(playerPhysics.Position.y/screenScale) * screenScale
+			rayPos.x = (playerPhysics.Position.y-rayPos.y)*arcTan + playerPhysics.Position.y
+			offset.y = -screenScale
+			offset.x = -offset.y * arcTan
+		} else if rayAngle < onePi {
+			rayPos.y = math.Floor(playerPhysics.Position.y/screenScale)*screenScale + screenScale
+			rayPos.x = (playerPhysics.Position.y-rayPos.y)*arcTan + playerPhysics.Position.y
+			offset.y = screenScale
+			offset.x = -offset.y * arcTan
+		} else {
+			rayPos.x = playerPhysics.Position.x
+			rayPos.y = playerPhysics.Position.y
+			dof = 8
+		}
+		for dof < 8 {
+			if rayPos.x >= 0 && rayPos.x <= float64(mapSize.x) &&
+				rayPos.y >= 0 && rayPos.y <= float64(mapSize.y) {
+				red, _, _, _ := mapImg.At(int(rayPos.x), int(rayPos.y)).RGBA()
+				if red > 0 {
+					break /* hit wall */
+				} else {
+					/* next line */
+					rayPos.x += offset.x
+					rayPos.y += offset.y
+					dof += 1
+				}
+			} else {
+				break /* edge of map */
+			}
+		}
 
+		ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, rayPos.x*screenScale, rayPos.y*screenScale, cRed)
+
+	}
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }
 

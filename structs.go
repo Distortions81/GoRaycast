@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	screenWidth        = 512
-	screenHeight       = 512
-	screenScale        = 32
+	screenWidth        = 1024
+	screenHeight       = 1024
+	screenScale        = 64
 	playerRotSpeed     = 5.0
 	playerForwardSpeed = 10
 	twoPi              = math.Pi * 2.0
@@ -26,7 +26,7 @@ var (
 	cYellow = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed    = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 
-	mapSize xycord
+	mapSize ixycord
 
 	mapImg    *ebiten.Image
 	mapRender *ebiten.Image
@@ -50,4 +50,9 @@ type Game struct {
 type xycord struct {
 	x float64
 	y float64
+}
+
+type ixycord struct {
+	x int
+	y int
 }
