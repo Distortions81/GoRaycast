@@ -23,11 +23,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(mapRender, op)
 
 	/* Draw Player */
-	op.GeoM.Reset()
-	op.GeoM.Scale(2, 20)
-	op.GeoM.Rotate(playerPhysics.Rotation)
-	op.GeoM.Translate((playerPhysics.Position.x * screenScale), (playerPhysics.Position.y * screenScale))
-	screen.DrawImage(lineImg, op)
+	ebitenutil.DrawLine(screen,
+		playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale,
+		playerPhysics.Position.x*screenScale+playerPhysics.MovePos.x*32, playerPhysics.Position.y*screenScale+playerPhysics.MovePos.y*32,
+		cYellow)
+	ebitenutil.DrawCircle(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, 8, cYellow)
 
 	/* Draw rays */
 	rayAngle := playerPhysics.Rotation
@@ -68,7 +68,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				break /* edge of map */
 			}
 		}
-
 		ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, rayPos.x*screenScale, rayPos.y*screenScale, cRed)
 
 	}

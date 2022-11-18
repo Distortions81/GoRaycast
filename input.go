@@ -16,16 +16,16 @@ func (g *Game) Update() error {
 	for _, p := range g.keys {
 		switch p {
 		case ebiten.KeyW:
-			playerPhysics.Position.y += playerPhysics.MovePos.x / playerForwardSpeed
-			playerPhysics.Position.x += playerPhysics.MovePos.y / playerForwardSpeed
+			playerPhysics.Position.x += playerPhysics.MovePos.x / playerForwardSpeed
+			playerPhysics.Position.y += playerPhysics.MovePos.y / playerForwardSpeed
 		case ebiten.KeyS:
-			playerPhysics.Position.y -= playerPhysics.MovePos.x / playerForwardSpeed
-			playerPhysics.Position.x -= playerPhysics.MovePos.y / playerForwardSpeed
+			playerPhysics.Position.x -= playerPhysics.MovePos.x / playerForwardSpeed
+			playerPhysics.Position.y -= playerPhysics.MovePos.y / playerForwardSpeed
 		case ebiten.KeyD:
-			playerPhysics.Rotation += frameSpeed
+			playerPhysics.Rotation -= frameSpeed
 			angleCalc()
 		case ebiten.KeyA:
-			playerPhysics.Rotation -= frameSpeed
+			playerPhysics.Rotation += frameSpeed
 			angleCalc()
 		}
 	}

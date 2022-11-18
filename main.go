@@ -24,9 +24,6 @@ func main() {
 		return
 	}
 
-	lineImg = ebiten.NewImage(1, 1)
-	lineImg.Fill(cYellow)
-
 	wallImg = ebiten.NewImage(1, 1)
 	wallImg.Fill(color.White)
 

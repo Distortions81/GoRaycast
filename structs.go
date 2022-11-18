@@ -31,7 +31,6 @@ var (
 	mapImg    *ebiten.Image
 	mapRender *ebiten.Image
 	mapDirty  bool = true
-	lineImg   *ebiten.Image
 	wallImg   *ebiten.Image
 
 	playerPhysics pPhysics
