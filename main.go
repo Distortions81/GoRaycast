@@ -28,6 +28,8 @@ func main() {
 	mapSize.x = xs
 	mapSize.y = ys
 
+	maxDof = xs * ys
+
 	mapRender = ebiten.NewImage(xs*screenScale, ys*screenScale)
 
 	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)

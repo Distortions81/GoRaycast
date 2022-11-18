@@ -11,6 +11,8 @@ const (
 	screenWidth        = 1024
 	screenHeight       = 1024
 	screenScale        = 64
+	playerLineLen      = 32
+	playerCircleCir    = 8
 	playerRotSpeed     = 1.0
 	playerForwardSpeed = 10
 	threePi            = math.Pi * 3.0
@@ -32,6 +34,7 @@ var (
 	mapImg    *ebiten.Image
 	mapRender *ebiten.Image
 	mapDirty  bool = true
+	maxDof    int
 
 	playerPhysics pPhysics
 )

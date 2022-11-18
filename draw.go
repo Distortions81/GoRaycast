@@ -25,9 +25,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	/* Draw Player */
 	ebitenutil.DrawLine(screen,
 		playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale,
-		playerPhysics.Position.x*screenScale+playerPhysics.MovePos.x*32, playerPhysics.Position.y*screenScale+playerPhysics.MovePos.y*32,
+		playerPhysics.Position.x*screenScale+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y*screenScale+playerPhysics.MovePos.y*playerLineLen,
 		cYellow)
-	ebitenutil.DrawCircle(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, 8, cYellow)
+	ebitenutil.DrawCircle(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, playerCircleCir, cYellow)
 
 	/* Draw rays */
 	rayAngle := playerPhysics.Rotation
@@ -51,14 +51,14 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		} else if rayAngle == 0 || rayAngle == onePi {
 			rayPos.x = playerPhysics.Position.x
 			rayPos.y = playerPhysics.Position.y
-			dof = 8
+			dof = maxDof
 		}
-		for dof < 8 {
+		for dof < maxDof {
 			if rayPos.x > 0 && rayPos.x < float64(mapSize.x) &&
 				rayPos.y > 0 && rayPos.y < float64(mapSize.y) {
 				red, green, blue, alpha := mapImg.At(int(rayPos.x), int(rayPos.y)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
-					dof = 8
+					dof = maxDof
 					ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, math.Floor(rayPos.x)*screenScale, math.Floor(rayPos.y)*screenScale, cRed)
 				} else {
 					/* next line */
@@ -67,7 +67,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 					dof += 1
 				}
 			} else {
-				dof = 8 /* edge of map */
+				dof = maxDof /* edge of map */
 			}
 		}
 	}
