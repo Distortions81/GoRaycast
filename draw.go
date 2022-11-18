@@ -31,7 +31,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	var rayPos xycord
 	var offset xycord
-	
+
 	for rayNum := 0; rayNum < 320; rayNum++ {
 		dof := 0
 
@@ -90,6 +90,8 @@ func renderMap() {
 				r, g, b, a := mapImg.At(x, y).RGBA()
 				if (r > 0 || g > 0 || b > 0) && a > 0 {
 					ebitenutil.DrawRect(mapRender, float64(x*mapScale), float64(y*mapScale), mapScale-1, mapScale-1, color.White)
+				} else {
+					ebitenutil.DrawRect(mapRender, float64(x*mapScale), float64(y*mapScale), mapScale-1, mapScale-1, cDarkGray)
 				}
 			}
 		}
