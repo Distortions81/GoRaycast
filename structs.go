@@ -8,18 +8,18 @@ import (
 )
 
 const (
-	screenWidth        = 1024
-	screenHeight       = 1024
-	screenScale        = 64
-	playerLineLen      = 32
-	playerCircleCir    = 8
-	playerRotSpeed     = 1.0
-	playerForwardSpeed = 10
-	threePi            = math.Pi * 3.0
-	twoPi              = math.Pi * 2.0
-	onePi              = math.Pi
-	halfPi             = math.Pi / 2.0
-	quarterPi          = math.Pi / 4.0
+	screenWidth           = 1024
+	screenHeight          = 1024
+	mapScale              = 64
+	playerLineLen         = 32
+	playerCircleCir       = 8
+	playerRotSpeed        = 2
+	playerForwardSpeedDiv = 0.25
+	threePi               = math.Pi * 3.0
+	twoPi                 = math.Pi * 2.0
+	onePi                 = math.Pi
+	halfPi                = math.Pi / 2.0
+	quarterPi             = math.Pi / 4.0
 
 	/* long distance run, 2.2 to 2.6m/s */
 	/* walking 1.1 to 1.7m/s */

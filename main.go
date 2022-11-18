@@ -11,8 +11,8 @@ import (
 
 func main() {
 	var err error
-	playerPhysics.Position.x = 2
-	playerPhysics.Position.y = 2
+	playerPhysics.Position.x = 192
+	playerPhysics.Position.y = 192
 	playerPhysics.Rotation = onePi
 
 	ebiten.SetWindowSize(screenWidth, screenHeight)
@@ -28,9 +28,9 @@ func main() {
 	mapSize.x = xs
 	mapSize.y = ys
 
-	maxDof = xs * ys
+	maxDof = (xs * mapScale) * (ys * mapScale)
 
-	mapRender = ebiten.NewImage(xs*screenScale, ys*screenScale)
+	mapRender = ebiten.NewImage(xs*mapScale, ys*mapScale)
 
 	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
 	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
