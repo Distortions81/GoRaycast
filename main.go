@@ -11,8 +11,8 @@ import (
 
 func main() {
 	var err error
-	playerPhysics.Position.x = 192
-	playerPhysics.Position.y = 192
+	playerPhysics.Position.x = mapScale * 2
+	playerPhysics.Position.y = mapScale * 2
 	playerPhysics.Rotation = onePi
 
 	ebiten.SetWindowSize(screenWidth*screenMag, screenHeight*screenMag)

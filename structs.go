@@ -8,12 +8,12 @@ import (
 )
 
 const (
-	screenWidth           = 1024
-	screenHeight          = 1024
-	screenMag             = 1
-	mapScale              = 64
-	playerLineLen         = 32
-	playerCircleCir       = 8
+	screenWidth           = 512
+	screenHeight          = 512
+	screenMag             = 2
+	mapScale              = 32
+	playerLineLen         = 16
+	playerCircleCir       = 4
 	playerRotSpeed        = 2
 	playerForwardSpeedDiv = 1
 	threePi               = math.Pi * 3.0
