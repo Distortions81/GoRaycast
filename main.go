@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"image/color"
 	"log"
 	"math"
 
@@ -12,8 +11,8 @@ import (
 
 func main() {
 	var err error
-	playerPhysics.Position.x = 1
-	playerPhysics.Position.y = 1
+	playerPhysics.Position.x = 2
+	playerPhysics.Position.y = 2
 
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("GoRaycaster")
@@ -23,9 +22,6 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-
-	wallImg = ebiten.NewImage(1, 1)
-	wallImg.Fill(color.White)
 
 	xs, ys := mapImg.Size()
 	mapSize.x = xs

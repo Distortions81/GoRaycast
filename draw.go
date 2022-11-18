@@ -36,17 +36,17 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	for rayNum := 0; rayNum < 1; rayNum++ {
 		/* Check Horizontal Lines */
 		dof := 0
-		arcTan := math.Atan(rayAngle)
+		aTan := -1 / math.Tan(rayAngle)
 		if rayAngle > onePi {
-			rayPos.y = math.Floor(playerPhysics.Position.y/screenScale) * screenScale
-			rayPos.x = (playerPhysics.Position.y-rayPos.y)*arcTan + playerPhysics.Position.y
-			offset.y = -screenScale
-			offset.x = -offset.y * arcTan
+			rayPos.y = math.Floor(playerPhysics.Position.y)
+			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.x
+			offset.y = 0
+			offset.x = -offset.y * aTan
 		} else if rayAngle < onePi {
-			rayPos.y = math.Floor(playerPhysics.Position.y/screenScale)*screenScale + screenScale
-			rayPos.x = (playerPhysics.Position.y-rayPos.y)*arcTan + playerPhysics.Position.y
-			offset.y = screenScale
-			offset.x = -offset.y * arcTan
+			rayPos.y = math.Floor(playerPhysics.Position.y)
+			rayPos.x = (playerPhysics.Position.y-rayPos.y)*aTan + playerPhysics.Position.y
+			offset.y = 0
+			offset.x = -offset.y * aTan
 		} else {
 			rayPos.x = playerPhysics.Position.x
 			rayPos.y = playerPhysics.Position.y
@@ -55,9 +55,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		for dof < 8 {
 			if rayPos.x >= 0 && rayPos.x <= float64(mapSize.x) &&
 				rayPos.y >= 0 && rayPos.y <= float64(mapSize.y) {
-				red, _, _, _ := mapImg.At(int(rayPos.x), int(rayPos.y)).RGBA()
-				if red > 0 {
-					break /* hit wall */
+				red, green, blue, alpha := mapImg.At(int(rayPos.x), int(rayPos.y)).RGBA()
+				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
+					dof = 8
 				} else {
 					/* next line */
 					rayPos.x += offset.x
@@ -65,12 +65,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 					dof += 1
 				}
 			} else {
-				break /* edge of map */
+				dof = 8 /* edge of map */
 			}
 		}
-		ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, rayPos.x*screenScale, rayPos.y*screenScale, cRed)
-
 	}
+	ebitenutil.DrawLine(screen, playerPhysics.Position.x*screenScale, playerPhysics.Position.y*screenScale, rayPos.x*screenScale, rayPos.y*screenScale, cRed)
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }
 
@@ -79,16 +78,12 @@ func renderMap() {
 		mapDirty = false
 		mapRender.Fill(color.Transparent)
 
-		op := &ebiten.DrawImageOptions{Filter: ebiten.FilterNearest}
 		/* Draw walls */
-		for x := 0; x < int(mapSize.x); x++ {
-			for y := 0; y < int(mapSize.y); y++ {
-				r, _, _, _ := mapImg.At(x, y).RGBA()
-				if r > 0 {
-					op.GeoM.Reset()
-					op.GeoM.Scale(screenScale-1, screenScale-1)
-					op.GeoM.Translate(float64(x*screenScale), float64(y*screenScale))
-					mapRender.DrawImage(wallImg, op)
+		for x := 0; x < mapSize.x; x++ {
+			for y := 0; y < mapSize.y; y++ {
+				r, g, b, a := mapImg.At(x, y).RGBA()
+				if (r > 0 || g > 0 || b > 0) && a > 0 {
+					ebitenutil.DrawRect(mapRender, float64(x*screenScale), float64(y*screenScale), screenScale-1, screenScale-1, color.White)
 				}
 			}
 		}
