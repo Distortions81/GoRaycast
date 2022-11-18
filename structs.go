@@ -8,23 +8,21 @@ import (
 )
 
 const (
-	screenWidth     = 1280 / 2
-	screenHeight    = 720 / 2
-	screenScale     = 5
-	playerMoveSpeed = 5.0
-	twoPi           = math.Pi * 2.0
-	onePi           = math.Pi
-	halfPi          = math.Pi / 2.0
-	quarterPi       = math.Pi / 4.0
+	screenWidth        = 512
+	screenHeight       = 512
+	screenScale        = 32
+	playerRotSpeed     = 5.0
+	playerForwardSpeed = 10
+	twoPi              = math.Pi * 2.0
+	onePi              = math.Pi
+	halfPi             = math.Pi / 2.0
+	quarterPi          = math.Pi / 4.0
 
 	/* long distance run, 2.2 to 2.6m/s */
 	/* walking 1.1 to 1.7m/s */
 )
 
 var (
-	playerRotSpeed = 0.166
-	screenCenter   xycord
-
 	cYellow = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed    = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 
@@ -32,6 +30,7 @@ var (
 
 	mapImg  *ebiten.Image
 	lineImg *ebiten.Image
+	wallImg *ebiten.Image
 
 	playerPhysics pPhysics
 )
@@ -40,7 +39,6 @@ type pPhysics struct {
 	Position xycord
 	Rotation float64
 	MovePos  xycord
-	
 }
 
 type Game struct {

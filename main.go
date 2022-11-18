@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 	"log"
 	"math"
 
@@ -23,11 +24,11 @@ func main() {
 		return
 	}
 
-	screenCenter.x = screenWidth / 2
-	screenCenter.y = screenHeight / 2
-
 	lineImg = ebiten.NewImage(1, 1)
 	lineImg.Fill(cYellow)
+
+	wallImg = ebiten.NewImage(1, 1)
+	wallImg.Fill(color.White)
 
 	xs, ys := mapImg.Size()
 	mapSize.x = float64(xs)

@@ -9,23 +9,23 @@ import (
 
 func (g *Game) Update() error {
 
-	playerRotSpeed = playerMoveSpeed / ebiten.ActualFPS()
+	frameSpeed := playerRotSpeed / ebiten.ActualFPS()
 
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
 
 	for _, p := range g.keys {
 		switch p {
 		case ebiten.KeyW:
-			playerPhysics.Position.y += playerPhysics.MovePos.x
-			playerPhysics.Position.x += playerPhysics.MovePos.y
+			playerPhysics.Position.y += playerPhysics.MovePos.x / playerForwardSpeed
+			playerPhysics.Position.x += playerPhysics.MovePos.y / playerForwardSpeed
 		case ebiten.KeyS:
-			playerPhysics.Position.y -= playerPhysics.MovePos.x
-			playerPhysics.Position.x -= playerPhysics.MovePos.y
+			playerPhysics.Position.y -= playerPhysics.MovePos.x / playerForwardSpeed
+			playerPhysics.Position.x -= playerPhysics.MovePos.y / playerForwardSpeed
 		case ebiten.KeyD:
-			playerPhysics.Rotation += playerRotSpeed
+			playerPhysics.Rotation += frameSpeed
 			angleCalc()
 		case ebiten.KeyA:
-			playerPhysics.Rotation -= playerRotSpeed
+			playerPhysics.Rotation -= frameSpeed
 			angleCalc()
 		}
 	}
@@ -38,6 +38,6 @@ func angleCalc() {
 	} else if playerPhysics.Rotation < 0 {
 		playerPhysics.Rotation += twoPi
 	}
-	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
-	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
+	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)  // opposite
+	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation) // adjacent
 }
