@@ -28,8 +28,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	var hrayPos xycord
 	var offset xycord
 
-	rayAngle := fixRad(playerPhysics.Rotation + halfRenderRad)
-	radPerRay := degToRad(renderAngle / numRays)
+	rayAngle := fixRad(playerPhysics.Rotation) //+ halfRenderRad)
+	//radPerRay := degToRad(renderAngle / numRays)
 	for rayNum := 0; rayNum < numRays; rayNum++ {
 		dof := 0
 		sinRayAngle := math.Sin(rayAngle)
@@ -55,8 +55,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			dof = maxDof
 		}
 		for dof < maxDof {
-			if vrayPos.x > 0 && vrayPos.x < float64(mapSize.x*mapScale) &&
-				vrayPos.y > 0 && vrayPos.y < float64(mapSize.y*mapScale) {
+			if vrayPos.x >= 0 && vrayPos.x < float64(mapSize.x*mapScale) &&
+				vrayPos.y >= 0 && vrayPos.y < float64(mapSize.y*mapScale) {
 				red, green, blue, alpha := mapImg.At(int(vrayPos.x/mapScale), int(vrayPos.y/mapScale)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
 					dof = maxDof
@@ -90,8 +90,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			dof = maxDof
 		}
 		for dof < maxDof {
-			if hrayPos.x > 0 && hrayPos.x < float64(mapSize.x*mapScale) &&
-				hrayPos.y > 0 && hrayPos.y < float64(mapSize.y*mapScale) {
+			if hrayPos.x >= 0 && hrayPos.x < float64(mapSize.x*mapScale) &&
+				hrayPos.y >= 0 && hrayPos.y < float64(mapSize.y*mapScale) {
 				red, green, blue, alpha := mapImg.At(int(hrayPos.x/mapScale), int(hrayPos.y/mapScale)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
 					dof = maxDof
@@ -107,12 +107,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			}
 		}
 
-		if distance(playerPhysics.Position, hrayPos) < distance(playerPhysics.Position, vrayPos) {
+		ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+hrayPos.x, hrayPos.y, cGreen)
+		ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cRed)
+
+		/*if distance(playerPhysics.Position, hrayPos) < distance(playerPhysics.Position, vrayPos) {
 			ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+hrayPos.x, hrayPos.y, cGreen)
 		} else {
 			ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cRed)
-		}
-		rayAngle = fixRad(rayAngle - radPerRay)
+		}*/
+
+		//rayAngle = fixRad(rayAngle - radPerRay)
 	}
 
 	/* Draw Player */
@@ -121,7 +125,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		miniMapOffsetX+playerPhysics.Position.x+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y+playerPhysics.MovePos.y*playerLineLen,
 		cYellow)
 	ebitenutil.DrawCircle(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, playerCircleCir, cYellow)
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f\nvRay: %v hRay: %v", ebiten.ActualTPS(), ebiten.ActualFPS(), vrayPos, hrayPos))
 }
 
 func renderMap() {
@@ -134,7 +138,7 @@ func renderMap() {
 			for y := 0; y < mapSize.y; y++ {
 				r, g, b, a := mapImg.At(x, y).RGBA()
 				if (r > 0 || g > 0 || b > 0) && a > 0 {
-					ebitenutil.DrawRect(mapRender, float64(x*mapScale), float64(y*mapScale), mapScale-1, mapScale-1, color.White)
+					ebitenutil.DrawRect(mapRender, float64(x*mapScale), float64(y*mapScale), mapScale-1, mapScale-1, color.Black)
 				} else {
 					ebitenutil.DrawRect(mapRender, float64(x*mapScale), float64(y*mapScale), mapScale-1, mapScale-1, cDarkGray)
 				}

@@ -18,7 +18,7 @@ const (
 	playerLineLen         = 16
 	playerCircleCir       = 4
 	playerRotSpeed        = 1
-	playerForwardSpeedDiv = 1
+	playerForwardSpeedDiv = 10
 	threePi               = math.Pi * 3.0
 	twoPi                 = math.Pi * 2.0
 	onePi                 = math.Pi
