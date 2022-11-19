@@ -9,10 +9,9 @@ import (
 
 const (
 	maxDist               = 1000000.0
-	renderFov             = 90
-	numRays               = 320
-	screenWidth           = 512
-	screenHeight          = 512
+	renderFov             = 60
+	screenWidth           = 1024
+	screenHeight          = 1024
 	screenMag             = 2
 	mapScale              = 32
 	playerLineLen         = 16

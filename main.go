@@ -33,13 +33,13 @@ func main() {
 
 	renderFovRad = degToRad(renderFov)
 	halfFovRad = fixRad(renderFovRad / 2.0)
-	radPerRay = fixRad(renderFovRad / numRays)
+	radPerRay = fixRad(renderFovRad / screenWidth)
 
 	mapRender = ebiten.NewImage(xs*mapScale, ys*mapScale)
 
 	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)
 	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation)
-	miniMapOffsetX = 0 //float64(screenWidth*screenMag) - (float64(xs * mapScale))
+	miniMapOffsetX = float64(screenWidth) - (float64(xs * mapScale))
 
 	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 

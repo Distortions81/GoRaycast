@@ -27,11 +27,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	var vrayPos xycord
 	var hrayPos xycord
+	//var fPos xycord
 	var offset xycord
 	var movePos xycord
 	rayAngle := fixRad(playerPhysics.Rotation + halfFovRad)
 
-	for rayNum := 0; rayNum < numRays; rayNum++ {
+	for rayNum := 0; rayNum < screenWidth; rayNum++ {
 		movePos.x = math.Cos(rayAngle)  // opposite
 		movePos.y = -math.Sin(rayAngle) // adjacent
 
@@ -42,6 +43,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		hDist := maxDist
 		vDist := maxDist
+		fDist := 0.0
 
 		/* Check Vertical Lines */
 		if sinRayAngle > 0.001 { //Look left
@@ -117,10 +119,19 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		//Use shortest vector, if any found
 		if hDist < maxDist || vDist < maxDist {
 			if hDist < vDist {
-				ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+hrayPos.x, hrayPos.y, cRed)
+				fDist = hDist
+				//fPos = hrayPos
 			} else {
-				ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cRed)
+				fDist = vDist
+				//fPos = vrayPos
 			}
+		}
+
+		/* Draw rays */
+		if fDist < maxDist {
+			lh := (float64(mapSize.y) * screenHeight) / fDist
+			ebitenutil.DrawRect(screen, float64(rayNum), (screenHeight/2)-(lh/2), 1, lh, color.RGBA{0x00, uint8(float64(mapSize.y*255) / fDist), 0x00, 0xFF})
+			//ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+fPos.x, fPos.y, cRed)
 		}
 
 		rayAngle = fixRad(rayAngle - radPerRay)
