@@ -17,7 +17,7 @@ const (
 	mapScale              = 32
 	playerLineLen         = 16
 	playerCircleCir       = 4
-	playerRotSpeed        = 0.25
+	playerRotSpeed        = 1
 	playerForwardSpeedDiv = 1
 	threePi               = math.Pi * 3.0
 	twoPi                 = math.Pi * 2.0

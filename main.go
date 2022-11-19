@@ -14,6 +14,7 @@ func main() {
 	playerPhysics.Position.x = mapScale * 2
 	playerPhysics.Position.y = mapScale * 2
 	playerPhysics.Rotation = onePi
+	angleCalc()
 
 	ebiten.SetWindowSize(screenWidth*screenMag, screenHeight*screenMag)
 	ebiten.SetWindowTitle("GoRaycaster")

@@ -9,7 +9,13 @@ import (
 
 func (g *Game) Update() error {
 
-	frameSpeed := playerRotSpeed / ebiten.ActualFPS()
+	var frameSpeed float64
+	fps := ebiten.ActualFPS()
+	if fps > 1 {
+		frameSpeed = playerRotSpeed / fps
+	} else {
+		frameSpeed = playerRotSpeed / 60.0
+	}
 
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
 
