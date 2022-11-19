@@ -106,13 +106,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				dof = maxDof /* edge of map */
 			}
 		}
-		var rayPos *xycord
+
 		if distance(playerPhysics.Position, hrayPos) < distance(playerPhysics.Position, vrayPos) {
-			rayPos = &hrayPos
+			ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+hrayPos.x, hrayPos.y, cGreen)
 		} else {
-			rayPos = &vrayPos
+			ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cRed)
 		}
-		ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+rayPos.x, rayPos.y, cGreen)
 		rayAngle = fixRad(rayAngle - radPerRay)
 	}
 
