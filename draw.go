@@ -47,12 +47,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		/* Check Vertical Lines */
 		if sinRayAngle > 0.001 { //Look left
-			vrayPos.x = (math.Floor(playerPhysics.Position.x)/mapScale)*mapScale + mapScale
+			vrayPos.x = math.Floor(playerPhysics.Position.x/mapScale)*mapScale + mapScale
 			vrayPos.y = (playerPhysics.Position.x-vrayPos.x)*tanRayAngle + playerPhysics.Position.y
 			offset.x = mapScale
 			offset.y = -offset.x * tanRayAngle
 		} else if sinRayAngle < -0.001 { //Look right
-			vrayPos.x = (math.Floor(playerPhysics.Position.x)/mapScale)*mapScale - 0.0001
+			vrayPos.x = math.Floor(playerPhysics.Position.x/mapScale)*mapScale - 0.0001
 			vrayPos.y = (playerPhysics.Position.x-vrayPos.x)*tanRayAngle + playerPhysics.Position.y
 			offset.x = -mapScale
 			offset.y = -offset.x * tanRayAngle
@@ -83,12 +83,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		/* Check Horizontal Lines */
 		dof = 0
 		if sinRayAngle > 0.001 { //Look north
-			hrayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale - 0.0001
+			hrayPos.y = math.Floor(playerPhysics.Position.y/mapScale)*mapScale - 0.0001
 			hrayPos.x = (playerPhysics.Position.y-hrayPos.y)*iTanRayAngle + playerPhysics.Position.x
 			offset.y = -mapScale
 			offset.x = -offset.y * iTanRayAngle
 		} else if sinRayAngle < -0.001 { //Look south
-			hrayPos.y = (math.Floor(playerPhysics.Position.y)/mapScale)*mapScale + mapScale
+			hrayPos.y = math.Floor(playerPhysics.Position.y/mapScale)*mapScale + mapScale
 			hrayPos.x = (playerPhysics.Position.y-hrayPos.y)*iTanRayAngle + playerPhysics.Position.x
 			offset.y = mapScale
 			offset.x = -offset.y * iTanRayAngle

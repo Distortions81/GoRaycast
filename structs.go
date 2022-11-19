@@ -10,9 +10,9 @@ import (
 const (
 	maxDist               = 1000000.0
 	renderFov             = 60
-	screenWidth           = 320
-	screenHeight          = 200
-	screenMag             = 5
+	screenWidth           = 1920
+	screenHeight          = 1080
+	screenMag             = 1
 	mapScale              = 32
 	playerLineLen         = 16
 	playerCircleCir       = 4
