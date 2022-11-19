@@ -8,17 +8,16 @@ import (
 )
 
 const (
-	numRays               = 1
-	renderAngle           = 0
-	halfRenderAngle       = renderAngle / 2
+	renderFov             = 90
+	numRays               = 512
 	screenWidth           = 512
 	screenHeight          = 512
 	screenMag             = 2
 	mapScale              = 32
 	playerLineLen         = 16
 	playerCircleCir       = 4
-	playerRotSpeed        = 1
-	playerForwardSpeedDiv = 10
+	playerRotSpeed        = 2
+	playerForwardSpeedDiv = 2
 	threePi               = math.Pi * 3.0
 	twoPi                 = math.Pi * 2.0
 	onePi                 = math.Pi
@@ -30,8 +29,10 @@ const (
 )
 
 var (
-	halfRenderRad  = degToRad(halfRenderAngle)
-	rayRads        = degToRad(renderAngle / screenWidth)
+	renderFovRad float64
+	halfFovRad   float64
+	radPerRay    float64
+
 	miniMapOffsetX float64
 	cDarkGray      = color.RGBA{0x20, 0x20, 0x20, 0xFF}
 	cYellow        = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}

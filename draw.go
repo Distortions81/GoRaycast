@@ -24,19 +24,21 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(mapRender, op)
 
 	/* Draw rays */
+
 	var vrayPos xycord
 	var hrayPos xycord
 	var offset xycord
+	var movePos xycord
+	rayAngle := fixRad(playerPhysics.Rotation + halfFovRad)
 
-	rayAngle := fixRad(playerPhysics.Rotation) //+ halfRenderRad)
-	//radPerRay := degToRad(renderAngle / numRays)
 	for rayNum := 0; rayNum < numRays; rayNum++ {
+		movePos.x = math.Cos(rayAngle)  // opposite
+		movePos.y = -math.Sin(rayAngle) // adjacent
+
 		dof := 0
 		sinRayAngle := math.Sin(rayAngle)
-		//cosRayAngle := math.Cos(rayAngle)
 		tanRayAngle := math.Tan(rayAngle)
 		iTanRayAngle := 1.0 / tanRayAngle
-		//nTanRayAngle := -tanRayAngle
 
 		/* Check Vertical Lines */
 		if sinRayAngle > 0.001 { //Look left
@@ -55,15 +57,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			dof = maxDof
 		}
 		for dof < maxDof {
-			if vrayPos.x > 1 && vrayPos.x < float64(mapSize.x*mapScale) &&
-				vrayPos.y > 1 && vrayPos.y < float64(mapSize.y*mapScale) {
+			if vrayPos.x > 0 && vrayPos.x < float64(mapSize.x*mapScale) &&
+				vrayPos.y > 0 && vrayPos.y < float64(mapSize.y*mapScale) {
 				red, green, blue, alpha := mapImg.At(int(vrayPos.x/mapScale), int(vrayPos.y/mapScale)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
 					dof = maxDof
 				} else {
 					/* next line */
-					vrayPos.x += playerPhysics.MovePos.x
-					vrayPos.y += playerPhysics.MovePos.y
+					vrayPos.x += movePos.x
+					vrayPos.y += movePos.y
 
 					dof += 1
 				}
@@ -90,15 +92,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			dof = maxDof
 		}
 		for dof < maxDof {
-			if hrayPos.x > 1 && hrayPos.x < float64(mapSize.x*mapScale) &&
-				hrayPos.y > 1 && hrayPos.y < float64(mapSize.y*mapScale) {
+			if hrayPos.x > 0 && hrayPos.x < float64(mapSize.x*mapScale) &&
+				hrayPos.y > 0 && hrayPos.y < float64(mapSize.y*mapScale) {
 				red, green, blue, alpha := mapImg.At(int(hrayPos.x/mapScale), int(hrayPos.y/mapScale)).RGBA()
 				if (red > 0 || green > 0 || blue > 0) && alpha > 0 {
 					dof = maxDof
 				} else {
 					/* next line */
-					hrayPos.x += playerPhysics.MovePos.x
-					hrayPos.y += playerPhysics.MovePos.y
+					hrayPos.x += movePos.x
+					hrayPos.y += movePos.y
 
 					dof += 1
 				}
@@ -107,13 +109,14 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			}
 		}
 
+		//Use shortest vector
 		if distance(playerPhysics.Position, hrayPos) < distance(playerPhysics.Position, vrayPos) {
 			ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+hrayPos.x, hrayPos.y, cRed)
 		} else {
 			ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cRed)
 		}
 
-		//rayAngle = fixRad(rayAngle - radPerRay)
+		rayAngle = fixRad(rayAngle - radPerRay)
 	}
 
 	/* Draw Player */
@@ -122,8 +125,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		miniMapOffsetX+playerPhysics.Position.x+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y+playerPhysics.MovePos.y*playerLineLen,
 		cYellow)
 	ebitenutil.DrawCircle(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, playerCircleCir, cYellow)
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f\nvRay: %0.2f.%0.2f hRay: %0.2f,%0.2f, Rot: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS(),
-		vrayPos.x, vrayPos.y, hrayPos.x, hrayPos.y, playerPhysics.Rotation))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }
 
 func renderMap() {
