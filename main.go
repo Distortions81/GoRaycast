@@ -50,11 +50,12 @@ func degToRad(deg float64) float64 {
 }
 
 func fixRad(rad float64) float64 {
-	if rad > twoPi || rad < 0 {
-		return rad - twoPi*math.Floor((rad+onePi)/twoPi)
-	} else {
-		return rad
+	if rad > twoPi {
+		rad -= twoPi
+	} else if rad < 0 {
+		rad += twoPi
 	}
+	return rad
 }
 
 func distance(a, b xycord) float64 {
