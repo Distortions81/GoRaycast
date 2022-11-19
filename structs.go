@@ -9,8 +9,8 @@ import (
 
 const (
 	maxDist               = 1000000.0
-	renderFov             = 359
-	numRays               = 180
+	renderFov             = 90
+	numRays               = 320
 	screenWidth           = 512
 	screenHeight          = 512
 	screenMag             = 2

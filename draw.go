@@ -44,7 +44,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		vDist := maxDist
 
 		/* Check Vertical Lines */
-		if sinRayAngle > 0 { //Look left
+		if sinRayAngle > 0.001 { //Look left
 			vrayPos.x = (math.Floor(playerPhysics.Position.x)/mapScale)*mapScale + mapScale
 			vrayPos.y = (playerPhysics.Position.x-vrayPos.x)*tanRayAngle + playerPhysics.Position.y
 			offset.x = mapScale
@@ -119,7 +119,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			if hDist < vDist {
 				ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+hrayPos.x, hrayPos.y, cRed)
 			} else {
-				ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cGreen)
+				ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+vrayPos.x, vrayPos.y, cRed)
 			}
 		}
 
