@@ -16,12 +16,12 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.Update()
 
-	op := &ebiten.DrawImageOptions{Filter: ebiten.FilterNearest}
+	//op := &ebiten.DrawImageOptions{Filter: ebiten.FilterNearest}
 
 	/*Draw walls */
-	renderMap()
-	op.GeoM.Translate(miniMapOffsetX, 0)
-	screen.DrawImage(mapRender, op)
+	//renderMap()
+	//op.GeoM.Translate(miniMapOffsetX, 0)
+	//screen.DrawImage(mapRender, op)
 
 	/* Draw rays */
 
@@ -130,7 +130,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		/* Draw rays */
 		if fDist < maxDist {
 			lh := (float64(mapSize.y) * screenHeight) / fDist
-			ebitenutil.DrawRect(screen, float64(rayNum), (screenHeight/2)-(lh/2), 1, lh, color.RGBA{0x00, uint8(float64(mapSize.y*255) / fDist), 0x00, 0xFF})
+			bright := uint8(float64(mapSize.y*255) / fDist)
+			ebitenutil.DrawRect(screen, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{bright, bright, bright, 0xFF})
 			//ebitenutil.DrawLine(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, miniMapOffsetX+fPos.x, fPos.y, cRed)
 		}
 
@@ -138,11 +139,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 
 	/* Draw Player */
-	ebitenutil.DrawLine(screen,
+	/*ebitenutil.DrawLine(screen,
 		miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y,
 		miniMapOffsetX+playerPhysics.Position.x+playerPhysics.MovePos.x*playerLineLen, playerPhysics.Position.y+playerPhysics.MovePos.y*playerLineLen,
 		cYellow)
-	ebitenutil.DrawCircle(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, playerCircleCir, cYellow)
+	ebitenutil.DrawCircle(screen, miniMapOffsetX+playerPhysics.Position.x, playerPhysics.Position.y, playerCircleCir, cYellow) */
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }
 
