@@ -48,17 +48,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
-func fixRad(rad float64) float64 {
-	for rad < 0 {
-		rad += twoPi
-	}
-	for rad >= twoPi {
-		rad -= twoPi
-	}
-	return rad
-}
-
-func degToRad(deg float64) float64 {
-	return fixRad(deg * onePi / 180.0)
-}
