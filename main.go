@@ -41,10 +41,6 @@ func main() {
 	halfFovRad = fixRad(renderFovRad / 2.0)
 	radPerRay = fixRad(renderFovRad / screenWidth)
 
-	/* Minimap setup */
-	mapRender = ebiten.NewImage(xs*mapScale, ys*mapScale)
-	miniMapOffsetX = float64(screenWidth) - (float64(xs * mapScale))
-
 	fmt.Printf("Map size: %v,%v\n", mapSize.x, mapSize.y)
 
 	/* Start ebiten */

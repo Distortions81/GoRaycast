@@ -33,18 +33,15 @@ var (
 	halfFovRad   float64
 	radPerRay    float64
 
-	miniMapOffsetX float64
-	cDarkGray      = color.RGBA{0x20, 0x20, 0x20, 0xFF}
-	cYellow        = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
-	cRed           = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
-	cGreen         = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
+	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
+	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
+	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
+	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
 
 	mapSize ixycord
 
-	mapImg    *ebiten.Image
-	mapRender *ebiten.Image
-	mapDirty  bool = true
-	maxDof    int
+	mapImg *ebiten.Image
+	maxDof int
 
 	playerPhysics pPhysics
 )
