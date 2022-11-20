@@ -14,7 +14,8 @@ func main() {
 	/* Player starting pos/rot */
 	playerPhysics.Position.x = mapScale * 2
 	playerPhysics.Position.y = mapScale * 2
-	playerPhysics.Rotation = onePi
+	playerPhysics.Rotation = 0.0001
+
 	angleCalc() /* Update movepos */
 
 	/* Window init */

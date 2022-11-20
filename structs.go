@@ -24,6 +24,16 @@ const (
 	halfPi                = math.Pi / 2.0
 	quarterPi             = math.Pi / 4.0
 
+	northStart = 0
+	northEnd   = onePi
+	southStart = onePi
+	southEnd   = twoPi
+
+	leftStart  = threePi / 2.0
+	leftEnd    = halfPi
+	rightStart = threePi / 2.0
+	rightEnd   = halfPi
+
 	/* long distance run, 2.2 to 2.6m/s */
 	/* walking 1.1 to 1.7m/s */
 )
