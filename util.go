@@ -3,7 +3,10 @@ package main
 import "math"
 
 func distance(a, b xycord) float64 {
-	return math.Hypot(float64(a.y-b.x), float64(a.y-b.y))
+	dx := a.x - b.x
+	dy := a.y - b.y
+
+	return math.Sqrt(dx*dx + dy*dy)
 }
 
 func fixRad(rad float64) float64 {
