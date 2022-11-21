@@ -37,7 +37,7 @@ func main() {
 	meltBuf = ebiten.NewImage(meltWidth, meltHeight)
 	randomizeMelt()
 	doMelt = meltFrames
-	meltStart.Fill(color.Black) //Loading screen/logo here later
+	meltStart.Fill(cRed) //Loading screen/logo here later
 
 	/* Save size info */
 	xs, ys := mapImg.Size()

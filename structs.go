@@ -22,9 +22,9 @@ const (
 	playerRotSpeed        = 2
 	playerForwardSpeedDiv = 0.5
 
-	meltMag    = screenWidth / 320 //Emulate 320x200ish
+	meltMag    = screenWidth / 160 //Emulate 320x200ish, melt is 2 pixels wide
 	meltWidth  = screenWidth / meltMag
-	meltHeight = screenHeight / meltMag
+	meltHeight = screenHeight / (meltMag / 2)
 	meltFrames = meltHeight + meltAmount
 	meltSpeed  = 3
 	meltAmount = 24
