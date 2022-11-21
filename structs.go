@@ -16,7 +16,7 @@ const (
 	meltHeight            = screenHeight / 6
 	meltFrames            = meltHeight + meltAmount
 	meltSpeed             = 3
-	meltAmount            = 16
+	meltAmount            = 24
 	screenMag             = 1
 	mapScale              = 32
 	playerLineLen         = 16
@@ -34,6 +34,7 @@ const (
 )
 
 var (
+	frameNumber  uint64
 	doMelt       int
 	renderFovRad float64
 	halfFovRad   float64

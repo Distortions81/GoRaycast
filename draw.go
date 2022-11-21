@@ -16,13 +16,14 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+	frameNumber++
 
 	/* Process input */
 	g.processInput(screen)
 
 	var s *ebiten.Image
 	if doMelt < 0 {
-		screenSave.Fill(color.Black)
+		screenSave.Fill(cDarkGray)
 		s = screenSave
 	} else {
 		s = screen
@@ -182,9 +183,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		meltStart.DrawImage(screenSave, op)
 		screen.DrawImage(screenSave, nil)
 
-		for i := 0; i < meltWidth; i++ {
-			meltOffsets[i] = rand.Intn(meltAmount)
-		}
+		randomizeMelt()
 	}
 
 	if doMelt > 0 {
@@ -211,5 +210,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Reset()
 		op.GeoM.Scale(meltScale.x, meltScale.y)
 		screen.DrawImage(meltBuf, op)
+	}
+}
+
+func randomizeMelt() {
+	for i := 0; i < meltWidth; i++ {
+		meltOffsets[i] = rand.Intn(meltAmount)
 	}
 }
