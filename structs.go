@@ -9,9 +9,18 @@ import (
 
 const (
 	maxDist      = 1000000.0
-	renderFov    = 60
-	screenWidth  = 1280
-	screenHeight = 720
+	renderFov    = 90
+	screenWidth  = 3840
+	screenHeight = 2160
+	screenMag    = 1
+	mapScale     = 32
+	maxShadow    = 0.01
+	dirShading   = 2.0 //2.0 would be 50% darker on horizontal walls
+
+	playerLineLen         = 16
+	playerCircleCir       = 4
+	playerRotSpeed        = 1
+	playerForwardSpeedDiv = 0.5
 
 	meltWidth  = screenWidth / 6
 	meltHeight = screenHeight / 6
@@ -19,17 +28,11 @@ const (
 	meltSpeed  = 3
 	meltAmount = 24
 
-	screenMag             = 1
-	mapScale              = 32
-	playerLineLen         = 16
-	playerCircleCir       = 4
-	playerRotSpeed        = 1
-	playerForwardSpeedDiv = 2
-	threePi               = math.Pi * 3.0
-	twoPi                 = math.Pi * 2.0
-	onePi                 = math.Pi
-	halfPi                = math.Pi / 2.0
-	quarterPi             = math.Pi / 4.0
+	threePi   = math.Pi * 3.0
+	twoPi     = math.Pi * 2.0
+	onePi     = math.Pi
+	halfPi    = math.Pi / 2.0
+	quarterPi = math.Pi / 4.0
 
 	/* long distance run, 2.2 to 2.6m/s */
 	/* walking 1.1 to 1.7m/s */

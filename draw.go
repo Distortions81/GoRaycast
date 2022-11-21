@@ -50,6 +50,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		var verticalColor color.Color
 		var horizontalColor color.Color
 		var finalColor color.Color
+		var wallWasHorizontal = false
 		finalColor = color.White
 
 		/* Reset ray distance */
@@ -147,6 +148,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			if horizontalDistance < verticalDistance {
 				finalDistance = horizontalDistance
 				finalColor = horizontalColor
+				wallWasHorizontal = true
 			} else {
 				finalDistance = verticalDistance
 				finalColor = verticalColor
@@ -158,14 +160,18 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			lh := (float64(mapSize.y) * screenHeight) / finalDistance
 			r, g, b, _ := finalColor.RGBA()
 			d := (float64(mapSize.y+mapSize.x) / (finalDistance))
-			if d < 0 {
-				d = 0
+			if d < maxShadow {
+				d = maxShadow
 			} else if d > 1 {
 				d = 1
 			}
-			red := uint8(((float64(r) / 255.0) * d))
-			green := uint8(((float64(g) / 255.0) * d))
-			blue := uint8(((float64(b) / 255.0) * d))
+			shade := 256.0
+			if wallWasHorizontal {
+				shade = 256.0 * (dirShading)
+			}
+			red := uint8(((float64(r) / shade) * d))
+			green := uint8(((float64(g) / shade) * d))
+			blue := uint8(((float64(b) / shade) * d))
 			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
 		}
 
