@@ -24,7 +24,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	var s *ebiten.Image
 	if doMelt < 0 || meltQuit {
-		screenSave.Fill(cDarkGray)
+		screenSave.Fill(color.Black)
 		s = screenSave
 	} else {
 		s = screen
