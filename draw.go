@@ -19,7 +19,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	var verticalRayPosition xycord
 	var horizontalRayPosition xycord
-	var facingPos xycord
+	var offset xycord
 
 	/* Move ray counter-clockwise from center, half our FOV */
 	rayAngle := fixRad(playerPhysics.Rotation + halfFovRad)
@@ -30,25 +30,32 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		/* Reset depth */
 		currentDepth := 0
 
+		/* Reset offsets */
+		offset.x = 0
+		offset.y = 0
+
 		/* Reset ray distance */
 		horizontalDistance := maxDist
 		verticalDistance := maxDist
 		finalDistance := 0.0
 
 		/* Precalc commonly used conversions */
+		cosRayAngle := math.Cos(rayAngle)
 		sinRayAngle := math.Sin(rayAngle)
 		tanRayAngle := math.Tan(rayAngle)
 		iTanRayAngle := 1.0 / tanRayAngle
-		facingPos.x = math.Cos(rayAngle) // opposite
-		facingPos.y = -sinRayAngle       // adjacent
 
 		/* Check Vertical Lines */
-		if sinRayAngle > 0.001 { //Look left
+		if cosRayAngle > 0.001 { //Look left
 			verticalRayPosition.x = math.Floor(playerPhysics.Position.x/mapScale)*mapScale + mapScale
 			verticalRayPosition.y = (playerPhysics.Position.x-verticalRayPosition.x)*tanRayAngle + playerPhysics.Position.y
-		} else if sinRayAngle < -0.001 { //Look right
+			offset.x = mapScale
+			offset.y = -offset.x * tanRayAngle
+		} else if cosRayAngle < -0.001 { //Look right
 			verticalRayPosition.x = math.Floor(playerPhysics.Position.x/mapScale)*mapScale - 0.0001
 			verticalRayPosition.y = (playerPhysics.Position.x-verticalRayPosition.x)*tanRayAngle + playerPhysics.Position.y
+			offset.x = -mapScale
+			offset.y = -offset.x * tanRayAngle
 		} else {
 			verticalRayPosition.x = playerPhysics.Position.x
 			verticalRayPosition.y = playerPhysics.Position.y
@@ -66,8 +73,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 					currentDepth = maxDof
 				} else {
 					/* advance down the ray angle */
-					verticalRayPosition.x += facingPos.x
-					verticalRayPosition.y += facingPos.y
+					verticalRayPosition.x += offset.x
+					verticalRayPosition.y += offset.y
 
 					currentDepth += 1
 				}
@@ -83,9 +90,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		if sinRayAngle > 0.001 { //Look north
 			horizontalRayPosition.y = math.Floor(playerPhysics.Position.y/mapScale)*mapScale - 0.0001
 			horizontalRayPosition.x = (playerPhysics.Position.y-horizontalRayPosition.y)*iTanRayAngle + playerPhysics.Position.x
+			offset.y = -mapScale
+			offset.x = -offset.y * iTanRayAngle
 		} else if sinRayAngle < -0.001 { //Look south
 			horizontalRayPosition.y = math.Floor(playerPhysics.Position.y/mapScale)*mapScale + mapScale
 			horizontalRayPosition.x = (playerPhysics.Position.y-horizontalRayPosition.y)*iTanRayAngle + playerPhysics.Position.x
+			offset.y = mapScale
+			offset.x = -offset.y * iTanRayAngle
 		} else {
 			horizontalRayPosition.x = playerPhysics.Position.x
 			horizontalRayPosition.y = playerPhysics.Position.y
@@ -103,8 +114,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 					currentDepth = maxDof
 				} else {
 					/* dvance down the ay angle */
-					horizontalRayPosition.x += facingPos.x
-					horizontalRayPosition.y += facingPos.y
+					horizontalRayPosition.x += offset.x
+					horizontalRayPosition.y += offset.y
 
 					currentDepth += 1
 				}
