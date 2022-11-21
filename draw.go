@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"image"
 	"image/color"
 	"math"
+	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -16,23 +19,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	/* Process input */
 	g.processInput(screen)
-
-	if doMelt > 0 {
-		doMelt--
-
-		meltBuf.Fill(color.Black)
-		meltBuf.DrawImage(meltStart, nil)
-
-		/* Draw buffer out */
-		op := &ebiten.DrawImageOptions{}
-		var meltScale xycord
-
-		meltScale.x = screenWidth / meltWidth
-		meltScale.y = screenHeight / meltHeight
-		op.GeoM.Scale(meltScale.x, meltScale.y)
-		screen.DrawImage(meltBuf, op)
-		return
-	}
 
 	var s *ebiten.Image
 	if doMelt < 0 {
@@ -184,6 +170,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		/* Advance ray angle */
 		rayAngle = fixRad(rayAngle - radPerRay)
 	}
+	ebitenutil.DebugPrint(s, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 
 	if doMelt < 0 {
 		doMelt = meltFrames
@@ -195,6 +182,34 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		meltStart.DrawImage(screenSave, op)
 		screen.DrawImage(screenSave, nil)
 
+		for i := 0; i < meltWidth; i++ {
+			meltOffsets[i] = rand.Intn(meltAmount)
+		}
 	}
-	//ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
+
+	if doMelt > 0 {
+		doMelt--
+		op := &ebiten.DrawImageOptions{}
+
+		meltBuf.Fill(color.Transparent)
+		for i := 0; i < meltWidth; i++ {
+			op.GeoM.Reset()
+			offset := meltOffsets[i]
+			fNum := (meltFrames - doMelt) * meltSpeed
+			newOff := 0
+			if fNum > offset {
+				newOff = fNum - offset
+			}
+			op.GeoM.Translate(float64(i), float64(newOff))
+			meltBuf.DrawImage(meltStart.SubImage(image.Rect(i, 0, i+1, meltHeight)).(*ebiten.Image), op)
+		}
+
+		/*Draw to screen */
+		var meltScale xycord
+		meltScale.x = screenWidth / meltWidth
+		meltScale.y = screenHeight / meltHeight
+		op.GeoM.Reset()
+		op.GeoM.Scale(meltScale.x, meltScale.y)
+		screen.DrawImage(meltBuf, op)
+	}
 }
