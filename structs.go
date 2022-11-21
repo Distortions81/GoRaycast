@@ -10,8 +10,8 @@ import (
 const (
 	maxDist      = 1000000.0
 	renderFov    = 90
-	screenWidth  = 3840
-	screenHeight = 2160
+	screenWidth  = 1280
+	screenHeight = 720
 	screenMag    = 1
 	mapScale     = 32
 	maxShadow    = 0.01
@@ -19,7 +19,7 @@ const (
 
 	playerLineLen         = 16
 	playerCircleCir       = 4
-	playerRotSpeed        = 1
+	playerRotSpeed        = 2
 	playerForwardSpeedDiv = 0.5
 
 	meltMag    = screenWidth / 320 //Emulate 320x200ish
