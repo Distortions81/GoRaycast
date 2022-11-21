@@ -10,13 +10,13 @@ import (
 const (
 	maxDist               = 1000000.0
 	renderFov             = 60
-	screenWidth           = 1920
-	screenHeight          = 1080
+	screenWidth           = 1280
+	screenHeight          = 720
 	screenMag             = 1
 	mapScale              = 32
 	playerLineLen         = 16
 	playerCircleCir       = 4
-	playerRotSpeed        = 2
+	playerRotSpeed        = 1
 	playerForwardSpeedDiv = 2
 	threePi               = math.Pi * 3.0
 	twoPi                 = math.Pi * 2.0
