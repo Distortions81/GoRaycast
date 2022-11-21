@@ -33,6 +33,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		offset.x = 0
 		offset.y = 0
 
+		var verticalColor color.Color
+		var horizontalColor color.Color
+		var finalColor color.Color
+		finalColor = color.White
+
 		/* Reset ray distance */
 		horizontalDistance := maxDist
 		verticalDistance := maxDist
@@ -65,8 +70,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				verticalRayPosition.y >= 0 && verticalRayPosition.y <= float64(mapSize.y*mapScale) {
 
 				/* Check if there is a wall here */
-				red, _, _, _ := mapImg.At(int(verticalRayPosition.x/mapScale), int(verticalRayPosition.y/mapScale)).RGBA()
-				if red > 0 {
+				verticalColor = mapImg.At(int(verticalRayPosition.x/mapScale), int(verticalRayPosition.y/mapScale))
+				if r, g, b, _ := verticalColor.RGBA(); r > 0 || g > 0 || b > 0 {
 					/* Calc distance, save, exit */
 					verticalDistance = distance(playerPhysics.Position, verticalRayPosition)
 					currentDepth = maxDof
@@ -106,8 +111,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				horizontalRayPosition.y >= 0 && horizontalRayPosition.y <= float64(mapSize.y*mapScale) {
 
 				/* Check if there is a wall here */
-				red, _, _, _ := mapImg.At(int(horizontalRayPosition.x/mapScale), int(horizontalRayPosition.y/mapScale)).RGBA()
-				if red > 0 {
+				horizontalColor = mapImg.At(int(horizontalRayPosition.x/mapScale), int(horizontalRayPosition.y/mapScale))
+				if r, g, b, _ := horizontalColor.RGBA(); r > 0 || g > 0 || b > 0 {
 					/* Calc distance, save, exit */
 					horizontalDistance = distance(playerPhysics.Position, horizontalRayPosition)
 					currentDepth = maxDof
@@ -127,16 +132,27 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		if horizontalDistance < maxDist || verticalDistance < maxDist {
 			if horizontalDistance < verticalDistance {
 				finalDistance = horizontalDistance
+				finalColor = horizontalColor
 			} else {
 				finalDistance = verticalDistance
+				finalColor = verticalColor
 			}
 		}
 
 		/* Draw rays */
 		if finalDistance < maxDist {
 			lh := (float64(mapSize.y) * screenHeight) / finalDistance
-			bright := uint8(float64(mapSize.y*255) / finalDistance)
-			ebitenutil.DrawRect(screen, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{bright, bright, bright, 0xFF})
+			r, g, b, _ := finalColor.RGBA()
+			d := (float64(mapSize.y+mapSize.x) / (finalDistance))
+			if d < 0 {
+				d = 0
+			} else if d > 1 {
+				d = 1
+			}
+			red := uint8(((float64(r) / 255.0) * d))
+			green := uint8(((float64(g) / 255.0) * d))
+			blue := uint8(((float64(b) / 255.0) * d))
+			ebitenutil.DrawRect(screen, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
 		}
 
 		/* Advance ray angle */

@@ -23,7 +23,7 @@ func main() {
 	ebiten.SetWindowTitle("GoRaycaster")
 
 	/* Load default test map */
-	mapImg, _, err = ebitenutil.NewImageFromFile("map1.png")
+	mapImg, _, err = ebitenutil.NewImageFromFile("map1c.png")
 	if err != nil {
 		fmt.Println(err)
 		return

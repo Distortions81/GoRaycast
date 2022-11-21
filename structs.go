@@ -9,7 +9,7 @@ import (
 
 const (
 	maxDist               = 1000000.0
-	renderFov             = 60
+	renderFov             = 90
 	screenWidth           = 1280
 	screenHeight          = 720
 	screenMag             = 1
