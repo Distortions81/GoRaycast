@@ -8,6 +8,10 @@ import (
 )
 
 func (g *Game) Update() error {
+	return nil
+}
+
+func (g *Game) processInput(screen *ebiten.Image) error {
 
 	var frameSpeed float64
 	fps := ebiten.ActualFPS()
@@ -21,6 +25,8 @@ func (g *Game) Update() error {
 
 	for _, p := range g.keys {
 		switch p {
+		case ebiten.KeyF10:
+			doMelt = -1
 		case ebiten.KeyW:
 			playerPhysics.Position.x += playerPhysics.MovePos.x / playerForwardSpeedDiv
 			playerPhysics.Position.y += playerPhysics.MovePos.y / playerForwardSpeedDiv

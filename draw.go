@@ -13,8 +13,34 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+
 	/* Process input */
-	g.Update()
+	g.processInput(screen)
+
+	if doMelt > 0 {
+		doMelt--
+
+		meltBuf.Fill(color.Black)
+		meltBuf.DrawImage(meltStart, nil)
+
+		/* Draw buffer out */
+		op := &ebiten.DrawImageOptions{}
+		var meltScale xycord
+
+		meltScale.x = screenWidth / meltWidth
+		meltScale.y = screenHeight / meltHeight
+		op.GeoM.Scale(meltScale.x, meltScale.y)
+		screen.DrawImage(meltBuf, op)
+		return
+	}
+
+	var s *ebiten.Image
+	if doMelt < 0 {
+		screenSave.Fill(color.Black)
+		s = screenSave
+	} else {
+		s = screen
+	}
 
 	var verticalRayPosition xycord
 	var horizontalRayPosition xycord
@@ -152,12 +178,23 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			red := uint8(((float64(r) / 255.0) * d))
 			green := uint8(((float64(g) / 255.0) * d))
 			blue := uint8(((float64(b) / 255.0) * d))
-			ebitenutil.DrawRect(screen, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
+			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
 		}
 
 		/* Advance ray angle */
 		rayAngle = fixRad(rayAngle - radPerRay)
 	}
 
+	if doMelt < 0 {
+		doMelt = meltFrames
+		op := &ebiten.DrawImageOptions{}
+		var scale xycord
+		scale.x = screenWidth / meltWidth
+		scale.y = screenHeight / meltHeight
+		op.GeoM.Scale(1.0/scale.x, 1.0/scale.y)
+		meltStart.DrawImage(screenSave, op)
+		screen.DrawImage(screenSave, nil)
+
+	}
 	//ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 }

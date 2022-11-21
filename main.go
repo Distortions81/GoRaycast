@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -20,6 +21,8 @@ func main() {
 
 	/* Window init */
 	ebiten.SetWindowSize(screenWidth*screenMag, screenHeight*screenMag)
+	screenSave = ebiten.NewImage(screenWidth, screenHeight)
+	screenSave.Fill(color.Black)
 	ebiten.SetWindowTitle("GoRaycaster")
 
 	/* Load default test map */
@@ -28,6 +31,10 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+
+	/*Melt screen buffer*/
+	meltStart = ebiten.NewImage(meltWidth, meltHeight)
+	meltBuf = ebiten.NewImage(meltWidth, meltHeight)
 
 	/* Save size info */
 	xs, ys := mapImg.Size()

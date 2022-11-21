@@ -9,9 +9,12 @@ import (
 
 const (
 	maxDist               = 1000000.0
-	renderFov             = 90
+	renderFov             = 60
 	screenWidth           = 1280
 	screenHeight          = 720
+	meltWidth             = screenWidth / 3
+	meltHeight            = screenHeight / 3
+	meltFrames            = 240
 	screenMag             = 1
 	mapScale              = 32
 	playerLineLen         = 16
@@ -29,6 +32,7 @@ const (
 )
 
 var (
+	doMelt       int
 	renderFovRad float64
 	halfFovRad   float64
 	radPerRay    float64
@@ -40,8 +44,11 @@ var (
 
 	mapSize ixycord
 
-	mapImg *ebiten.Image
-	maxDof int
+	mapImg     *ebiten.Image
+	meltStart  *ebiten.Image
+	meltBuf    *ebiten.Image
+	screenSave *ebiten.Image
+	maxDof     int
 
 	playerPhysics pPhysics
 )
