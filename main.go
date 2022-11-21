@@ -45,7 +45,7 @@ func main() {
 	mapSize.y = ys
 
 	/* Calculate reasonable max depth */
-	maxDof = (xs * mapScale) * (ys * mapScale)
+	maxDof = ((xs + ys) / 2) * 2
 
 	/* Precalc fov values */
 	renderFovRad = degToRad(renderFov)
