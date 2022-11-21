@@ -8,27 +8,30 @@ import (
 )
 
 const (
-	maxDist      = 1000000.0
-	renderFov    = 90
+	maxDist      = 1000000.0 //Used to signify no wall found
+	renderFov    = 90        //Degrees
 	screenWidth  = 1280
 	screenHeight = 720
-	screenMag    = 1
-	mapScale     = 32
-	maxShadow    = 0.01
-	dirShading   = 2.0 //2.0 would be 50% darker on horizontal walls
+	screenMag    = 1    //Maginify screen, mosaic
+	mapScale     = 32   //Units per map pixel
+	maxShadow    = 0.01 //Maxiumum darkness out of 1.0
 
-	playerLineLen         = 16
-	playerCircleCir       = 4
+	/* Shade horizontal walls a bit, faux shading */
+	dirShading = 2.0 //2.0 would be 50% darker on horizontal walls
+
+	/* Player rotate/move speed */
 	playerRotSpeed        = 2
 	playerForwardSpeedDiv = 0.5
 
-	meltMag    = screenWidth / 160 //Emulate 320x200ish, melt is 2 pixels wide
-	meltWidth  = screenWidth / meltMag
-	meltHeight = screenHeight / (meltMag / 2)
-	meltFrames = meltHeight + meltAmount
+	/* Screen melt params */
+	meltMag    = screenWidth / 160            //Emulate 320x200ish, melt is 2 pixels wide
+	meltWidth  = screenWidth / meltMag        //Figure out res based on magnatude, to keep aspect ratio
+	meltHeight = screenHeight / (meltMag / 2) //Half res vertical
+	meltFrames = meltHeight + meltAmount      //Wait for enough frames to pass (TODO account for speed)
 	meltSpeed  = 3
-	meltAmount = 24
+	meltAmount = 24 //Randomness
 
+	/* Commonly used radians values */
 	threePi   = math.Pi * 3.0
 	twoPi     = math.Pi * 2.0
 	onePi     = math.Pi
@@ -41,46 +44,52 @@ const (
 
 var (
 	frameNumber  uint64
-	doMelt       int
-	renderFovRad float64
-	halfFovRad   float64
-	radPerRay    float64
+	doMelt       int     //-1 to start timer, otherwise number of frames remaining
+	renderFovRad float64 //FoV in radians
+	halfFovRad   float64 //Half fov, to setup
+	radPerRay    float64 //Radians to add per ray
 
+	/* Some predfined colors */
 	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
 	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
 
+	/* Map size, and source image */
 	mapSize ixycord
+	mapImg  *ebiten.Image
 
-	mapImg *ebiten.Image
+	/* Screen melt buffers and offsets */
+	meltStart   *ebiten.Image  //Converted starting image
+	meltBuf     *ebiten.Image  //Melt effect output
+	meltOffsets [meltWidth]int //Pixel offsets for melt effect
+	screenSave  *ebiten.Image  //Screen capture
+	meltQuit    = false        //If true, melt is for exiting game
 
-	meltStart   *ebiten.Image
-	meltBuf     *ebiten.Image
-	meltOffsets [meltWidth]int
-	screenSave  *ebiten.Image
-	meltQuit    = false
+	maxDof int //Max depth
 
-	maxDof int
-
-	playerPhysics pPhysics
+	playerPhysics pPhysics //Player pos/rot/movepos
 )
 
+/* Player info */
 type pPhysics struct {
 	Position xycord
 	Rotation float64
 	MovePos  xycord
 }
 
+/* Keys pressed */
 type Game struct {
 	keys []ebiten.Key
 }
 
+/* x/y float64 */
 type xycord struct {
 	x float64
 	y float64
 }
 
+/* x/y integer */
 type ixycord struct {
 	x int
 	y int
