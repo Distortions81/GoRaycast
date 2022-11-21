@@ -6,6 +6,7 @@ import (
 	"image/color"
 	"math"
 	"math/rand"
+	"os"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -22,7 +23,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.processInput(screen)
 
 	var s *ebiten.Image
-	if doMelt < 0 {
+	if doMelt < 0 || meltQuit {
 		screenSave.Fill(cDarkGray)
 		s = screenSave
 	} else {
@@ -210,6 +211,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Reset()
 		op.GeoM.Scale(meltScale.x, meltScale.y)
 		screen.DrawImage(meltBuf, op)
+
+		if doMelt == 0 && meltQuit {
+			os.Exit(1)
+		}
 	}
 }
 

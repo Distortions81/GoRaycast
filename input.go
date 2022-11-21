@@ -27,6 +27,7 @@ func (g *Game) processInput(screen *ebiten.Image) error {
 		switch p {
 		case ebiten.KeyF10:
 			doMelt = -1
+			meltQuit = true
 		case ebiten.KeyW:
 			playerPhysics.Position.x += playerPhysics.MovePos.x / playerForwardSpeedDiv
 			playerPhysics.Position.y += playerPhysics.MovePos.y / playerForwardSpeedDiv

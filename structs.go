@@ -8,15 +8,17 @@ import (
 )
 
 const (
-	maxDist               = 1000000.0
-	renderFov             = 60
-	screenWidth           = 1280
-	screenHeight          = 720
-	meltWidth             = screenWidth / 6
-	meltHeight            = screenHeight / 6
-	meltFrames            = meltHeight + meltAmount
-	meltSpeed             = 3
-	meltAmount            = 24
+	maxDist      = 1000000.0
+	renderFov    = 60
+	screenWidth  = 1280
+	screenHeight = 720
+
+	meltWidth  = screenWidth / 6
+	meltHeight = screenHeight / 6
+	meltFrames = meltHeight + meltAmount
+	meltSpeed  = 3
+	meltAmount = 24
+
 	screenMag             = 1
 	mapScale              = 32
 	playerLineLen         = 16
@@ -47,12 +49,15 @@ var (
 
 	mapSize ixycord
 
-	mapImg      *ebiten.Image
+	mapImg *ebiten.Image
+
 	meltStart   *ebiten.Image
 	meltBuf     *ebiten.Image
 	meltOffsets [meltWidth]int
 	screenSave  *ebiten.Image
-	maxDof      int
+	meltQuit    = false
+
+	maxDof int
 
 	playerPhysics pPhysics
 )
