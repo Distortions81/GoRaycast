@@ -17,29 +17,29 @@ func main() {
 	playerPhysics.Position.y = mapScale * 2
 	playerPhysics.Rotation = 0.0001
 
-	angleCalc() /* Update movepos */
+	angleCalc() /* Update player  movepos */
 
 	/* Window init */
 	ebiten.SetWindowSize(screenWidth*screenMag, screenHeight*screenMag)
-	screenSave = ebiten.NewImage(screenWidth, screenHeight)
-	screenSave.Fill(color.Black)
 	ebiten.SetWindowTitle("GoRaycaster")
+	screenSave = ebiten.NewImage(screenWidth, screenHeight)
+	screenSave.Fill(color.Black) //Clear screen
 
 	/* Load default test map */
 	mapImg, _, err = ebitenutil.NewImageFromFile("map1c.png")
 	if err != nil {
 		fmt.Println(err)
-		return
+		return //Exit on error
 	}
 
 	/* Meltscreen buffers */
 	meltStart = ebiten.NewImage(meltWidth, meltHeight)
 	meltBuf = ebiten.NewImage(meltWidth, meltHeight)
-	randomizeMelt()
-	doMelt = meltFrames
+	randomizeMelt()      //Randomize values
+	doMelt = meltFrames  //Start timer
 	meltStart.Fill(cRed) //Loading screen/logo here later
 
-	/* Save size info */
+	/* Save map size info */
 	xs, ys := mapImg.Size()
 	mapSize.x = xs
 	mapSize.y = ys

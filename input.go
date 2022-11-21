@@ -13,6 +13,7 @@ func (g *Game) Update() error {
 
 func (g *Game) processInput(screen *ebiten.Image) error {
 
+	/* Move/turn speed based on fps */
 	var frameSpeed float64
 	fps := ebiten.ActualFPS()
 	if fps > 1 {
@@ -21,8 +22,10 @@ func (g *Game) processInput(screen *ebiten.Image) error {
 		frameSpeed = playerRotSpeed / 60.0
 	}
 
+	/* Get pressed keys */
 	g.keys = inpututil.AppendPressedKeys(g.keys[:0])
 
+	/* Process each key */
 	for _, p := range g.keys {
 		switch p {
 		case ebiten.KeyF10:
@@ -36,10 +39,10 @@ func (g *Game) processInput(screen *ebiten.Image) error {
 			playerPhysics.Position.y -= playerPhysics.MovePos.y / playerForwardSpeedDiv
 		case ebiten.KeyD:
 			playerPhysics.Rotation -= frameSpeed
-			angleCalc()
+			angleCalc() //Update player movepos
 		case ebiten.KeyA:
 			playerPhysics.Rotation += frameSpeed
-			angleCalc()
+			angleCalc() //Update player movepos
 		}
 	}
 	return nil
