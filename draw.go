@@ -198,6 +198,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		rayAngle = fixRad(rayAngle - radPerRay)
 	}
 
+	/* MiniMap */
 	miniMap.Fill(color.Black)
 	/* Draw walls -- TODO cache me */
 	for x := 0; x < int(mapSize.x); x++ {
@@ -208,7 +209,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 	/* Draw player */
 	ebitenutil.DrawCircle(miniMap, ((playerPhysics.Position.x / mapScale) * miniScale), ((playerPhysics.Position.y / mapScale) * miniScale), 4, cYellow)
-
 	/* Draw to screen */
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(screenWidth-float64((mapSize.x+1)*miniScale), miniScale)
