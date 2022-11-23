@@ -53,15 +53,16 @@ var (
 	radPerRay    float64 //Radians to add per ray
 
 	/* Some predfined colors */
-	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 128}
-	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 128}
-	cRed      = color.RGBA{0xFF, 0x00, 0x00, 128}
-	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 128}
-	cSmoked   = color.RGBA{0x00, 0x00, 0x00, 128}
+	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
+	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
+	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
+	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
+	cSmoked   = color.RGBA{0x00, 0x00, 0x00, 0xFF}
 
 	/* Map size, and source image */
 	mapSize ixycord
 	mapImg  *ebiten.Image
+	miniMap *ebiten.Image
 
 	/* Screen melt buffers and offsets */
 	meltStart   *ebiten.Image  //Converted starting image

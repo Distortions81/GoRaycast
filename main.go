@@ -44,6 +44,9 @@ func main() {
 	mapSize.x = xs
 	mapSize.y = ys
 
+	/* minimap buffer */
+	miniMap = ebiten.NewImage(miniScale*mapSize.x, miniScale*mapSize.y)
+
 	/* Calculate reasonable max depth */
 	maxDof = ((xs + ys) / 2) * 2
 

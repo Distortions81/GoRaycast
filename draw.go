@@ -198,17 +198,22 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		rayAngle = fixRad(rayAngle - radPerRay)
 	}
 
+	miniMap.Fill(color.Black)
 	/* Draw walls -- TODO cache me */
-	xoff := float64(screenWidth - (mapSize.x * miniScale) - miniScale)
-	ebitenutil.DrawRect(screen, float64(xoff), miniScale, float64(mapSize.x*miniScale), float64(mapSize.x*miniScale), cSmoked)
 	for x := 0; x < int(mapSize.x); x++ {
 		for y := 0; y < int(mapSize.y); y++ {
 			r, g, b, _ := mapImg.At(x, y).RGBA()
-			ebitenutil.DrawRect(screen, xoff+float64(x*miniScale), float64(y*miniScale)+miniScale, miniScale-1, miniScale-1, color.RGBA{uint8(r), uint8(g), uint8(b), 128})
+			ebitenutil.DrawRect(miniMap, float64(x*miniScale), float64(y*miniScale), miniScale-1, miniScale-1, color.RGBA{uint8(r), uint8(g), uint8(b), 0xFF})
 		}
 	}
 	/* Draw player */
-	ebitenutil.DrawCircle(screen, xoff+((playerPhysics.Position.x/mapScale)*miniScale), miniScale+((playerPhysics.Position.y/mapScale)*miniScale), 4, cYellow)
+	ebitenutil.DrawCircle(miniMap, ((playerPhysics.Position.x / mapScale) * miniScale), ((playerPhysics.Position.y / mapScale) * miniScale), 4, cYellow)
+
+	/* Draw to screen */
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(screenWidth-float64((mapSize.x+1)*miniScale), miniScale)
+	op.ColorM.Scale(1, 1, 1, 0.5)
+	screen.DrawImage(miniMap, op)
 
 	ebitenutil.DebugPrint(s, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 
