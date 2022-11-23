@@ -207,7 +207,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			ebitenutil.DrawRect(screen, xoff+float64(x*miniScale), float64(y*miniScale)+miniScale, miniScale-1, miniScale-1, color.RGBA{uint8(r), uint8(g), uint8(b), 128})
 		}
 	}
-
+	/* Draw player */
 	ebitenutil.DrawCircle(screen, xoff+((playerPhysics.Position.x/mapScale)*miniScale), miniScale+((playerPhysics.Position.y/mapScale)*miniScale), 4, cYellow)
 
 	ebitenutil.DebugPrint(s, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
