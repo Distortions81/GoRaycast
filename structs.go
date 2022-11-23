@@ -31,6 +31,9 @@ const (
 	meltSpeed  = 32
 	meltAmount = 512 //Randomness
 
+	/* Minimap */
+	miniScale = 8
+
 	/* Commonly used radians values */
 	threePi   = math.Pi * 3.0
 	twoPi     = math.Pi * 2.0
@@ -54,6 +57,7 @@ var (
 	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
+	cSmoked   = color.RGBA{0x00, 0x00, 0x00, 128}
 
 	/* Map size, and source image */
 	mapSize ixycord

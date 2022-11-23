@@ -197,6 +197,17 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		/* Advance ray angle */
 		rayAngle = fixRad(rayAngle - radPerRay)
 	}
+
+	/* Draw walls */
+	xoff := screenWidth - (mapSize.x * miniScale) - miniScale
+	ebitenutil.DrawRect(screen, float64(xoff), miniScale, float64(mapSize.x*miniScale), float64(mapSize.x*miniScale), cSmoked)
+	for x := 0; x < int(mapSize.x); x++ {
+		for y := 0; y < int(mapSize.y); y++ {
+			r, g, b, _ := mapImg.At(x, y).RGBA()
+			ebitenutil.DrawRect(screen, float64(xoff+(x*miniScale)), float64(y*miniScale)+miniScale, miniScale-1, miniScale-1, color.RGBA{uint8(r), uint8(g), uint8(b), 128})
+		}
+	}
+
 	ebitenutil.DebugPrint(s, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 
 	/* Melt started, grab screen */
