@@ -26,7 +26,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	/* If we are set to melt, or to quit game, swap output pointer */
 	if doMelt < 0 || meltQuit {
-		screenSave.Fill(cRed)
+		//screenSave.Fill(cRed)
 		s = screenSave
 	} else {
 		s = screen
@@ -267,5 +267,32 @@ func (g *Game) Draw(screen *ebiten.Image) {
 func randomizeMelt() {
 	for i := 0; i < meltWidth; i++ {
 		meltOffsets[i] = rand.Intn(meltAmount)
+	}
+
+	//Smoothing
+	var a, b, c, d, e, f, g int
+	for i := 0; i < meltWidth; i++ {
+		if i > 2 {
+			a = meltOffsets[i-3]
+		}
+		if i > 1 {
+			b = meltOffsets[i-2]
+		}
+		if i > 0 {
+			c = meltOffsets[i-1]
+		}
+		if i >= 0 {
+			d = meltOffsets[i]
+		}
+		if i < meltWidth-1 {
+			e = meltOffsets[i+1]
+		}
+		if i < meltWidth-2 {
+			f = meltOffsets[i+2]
+		}
+		if i < meltWidth-3 {
+			g = meltOffsets[i+3]
+		}
+		meltOffsets[i] = (a + b + c + d + e + f + g) / 7.0
 	}
 }

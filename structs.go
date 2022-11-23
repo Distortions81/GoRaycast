@@ -24,12 +24,12 @@ const (
 	playerForwardSpeedDiv = 0.5
 
 	/* Screen melt params */
-	meltMag    = screenWidth / 160            //Emulate 320x200ish, melt is 2 pixels wide
-	meltWidth  = screenWidth / meltMag        //Figure out res based on magnatude, to keep aspect ratio
-	meltHeight = screenHeight / (meltMag / 2) //Half res vertical
-	meltFrames = meltHeight + meltAmount      //Wait for enough frames to pass (TODO account for speed)
-	meltSpeed  = 3
-	meltAmount = 24 //Randomness
+	meltMag    = screenWidth / 160                            //Emulate 320x200ish, melt is 2 pixels wide
+	meltWidth  = screenWidth / meltMag                        //Figure out res based on magnatude, to keep aspect ratio
+	meltHeight = screenHeight                                 //Half res vertical
+	meltFrames = ((meltHeight + meltAmount) / meltSpeed) + 30 //Wait for enough frames to pass
+	meltSpeed  = 32
+	meltAmount = 512 //Randomness
 
 	/* Commonly used radians values */
 	threePi   = math.Pi * 3.0
