@@ -62,6 +62,7 @@ var (
 	/* Map size, and source image */
 	mapSize ixycord
 	mapImg  *ebiten.Image
+	rayImg  *ebiten.Image
 	miniMap *ebiten.Image
 
 	/* Screen melt buffers and offsets */
