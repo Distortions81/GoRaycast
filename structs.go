@@ -24,11 +24,10 @@ const (
 	playerForwardSpeedDiv = 0.5
 
 	/* Screen melt params */
-	meltMagW   = screenWidth / 160 //Emulate 320x200ish, melt is 2 pixels wide
-	meltMagH   = screenWidth / 200
-	meltWidth  = screenWidth / (meltMagW)        //Figure out res based on magnatude, to keep aspect ratio
-	meltHeight = screenHeight / (meltMagH)       //Half res vertical
-	meltFrames = ((meltHeight) / meltSpeed) + 20 //Wait for enough frames to pass
+	meltMagW   = screenWidth / 320 //Emulate 320x200ish, melt is 2 pixels wide
+	meltMagH   = screenHeight / 200
+	meltWidth  = screenWidth / (meltMagW)  //Figure out res based on magnatude, to keep aspect ratio
+	meltHeight = screenHeight / (meltMagH) //Half res vertical
 	meltSpeed  = 8
 
 	/* Minimap */

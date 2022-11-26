@@ -43,8 +43,8 @@ func main() {
 	/* Meltscreen buffers */
 	meltStart = ebiten.NewImage(meltWidth, meltHeight)
 	meltBuf = ebiten.NewImage(meltWidth, meltHeight)
-	randomizeMelt()     //Randomize values
-	doMelt = meltFrames //Start timer
+	randomizeMelt() //Randomize values
+	doMelt = 1      //Start timer
 
 	/*
 		op := &ebiten.DrawImageOptions{}

@@ -7,6 +7,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -221,7 +222,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	/* Melt started, grab screen */
 	if doMelt < 0 {
-		doMelt = meltFrames //start timer
+		doMelt = 1 //start timer
 
 		op := &ebiten.DrawImageOptions{}
 		var scale xycord
@@ -241,35 +242,38 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	/* Draw melt */
 	if doMelt > 0 {
+		doMelt++
 		op := &ebiten.DrawImageOptions{}
 
-		if frameNumber%2 == 0 {
-			doMelt--
+		/* Clear buffer */
+		meltBuf.Fill(color.Transparent)
+		isDone := true
 
-			/* Clear buffer */
-			meltBuf.Fill(color.Transparent)
+		/* Loop through each column */
+		for i := 0; i < meltWidth; i++ {
+			d := i * 2
+			op.GeoM.Reset()
+			offset := meltOffsets[i]
 
-			/* Loop through each column */
-			for i := 0; i < meltWidth; i++ {
-				op.GeoM.Reset()
-				offset := meltOffsets[i]
-
-				/* How much to move each column */
-				fNum := (meltFrames - doMelt) * 1
-
-				/* Don't start moving until we pass our offset */
-				newOff := 0
-				if fNum-1 > offset {
-					newOff = (fNum - 1) - offset
-				}
-				newOff *= meltSpeed
-
-				/* Move the line down, and only draw one line at a time. */
-				op.GeoM.Translate(float64(i), float64(newOff))
-
-				/* Draw to buffer */
-				meltBuf.DrawImage(meltStart.SubImage(image.Rect(i, 0, i+1, meltHeight)).(*ebiten.Image), op)
+			/* Don't start moving until we pass our offset */
+			newOff := 0
+			if doMelt-2 > offset {
+				newOff = (doMelt - 2) - offset
 			}
+			newOff *= meltSpeed
+
+			/* Move the line down, and only draw one line at a time. */
+			op.GeoM.Translate(float64(d), float64(newOff))
+
+			/* Draw to buffer */
+			meltBuf.DrawImage(meltStart.SubImage(image.Rect(d, 0, d+2, meltHeight)).(*ebiten.Image), op)
+			if newOff < meltHeight+10 {
+				isDone = false
+			}
+		}
+		if isDone {
+			//fmt.Printf("melt done: %v\n", doMelt)
+			doMelt = 0
 		}
 		/* Draw to screen */
 		var meltScale xycord
@@ -278,8 +282,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Reset()
 		op.GeoM.Scale(meltScale.x, meltScale.y)
 		screen.DrawImage(meltBuf, op)
-		//time.Sleep(time.Millisecond * 29)
-		//time.Sleep(time.Millisecond * 500)
+		time.Sleep(time.Millisecond * 100)
 
 		/* Marked to exit game, quit */
 		if doMelt == 0 && meltQuit {
@@ -292,7 +295,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 func randomizeMelt() {
 	r := 0
 	meltOffsets[0] = rand.Intn(255) % 16
-	for i := 1; i < meltWidth; i++ {
+	for i := 1; i < meltWidth/2; i++ {
 		r = (rand.Intn(255) % 3) - 1
 		meltOffsets[i] = meltOffsets[i-1] + r
 
