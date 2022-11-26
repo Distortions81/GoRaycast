@@ -241,33 +241,36 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	/* Draw melt */
 	if doMelt > 0 {
-		doMelt--
 		op := &ebiten.DrawImageOptions{}
 
-		/* Clear buffer */
-		meltBuf.Fill(color.Transparent)
+		if frameNumber%2 == 0 {
+			doMelt--
 
-		/* Loop through each column */
-		for i := 0; i < meltWidth; i++ {
-			op.GeoM.Reset()
-			offset := meltOffsets[i]
+			/* Clear buffer */
+			meltBuf.Fill(color.Transparent)
 
-			/* How much to move each column */
-			fNum := (meltFrames - doMelt) * meltSpeed
+			/* Loop through each column */
+			for i := 0; i < meltWidth; i++ {
+				op.GeoM.Reset()
+				offset := meltOffsets[i]
 
-			/* Don't start moving until we pass our offset */
-			newOff := 0
-			if fNum > offset {
-				newOff = fNum - offset
+				/* How much to move each column */
+				fNum := (meltFrames - doMelt) * 1
+
+				/* Don't start moving until we pass our offset */
+				newOff := 0
+				if fNum-1 > offset {
+					newOff = (fNum - 1) - offset
+				}
+				newOff *= meltSpeed
+
+				/* Move the line down, and only draw one line at a time. */
+				op.GeoM.Translate(float64(i), float64(newOff))
+
+				/* Draw to buffer */
+				meltBuf.DrawImage(meltStart.SubImage(image.Rect(i, 0, i+1, meltHeight)).(*ebiten.Image), op)
 			}
-
-			/* Move the line down, and only draw one line at a time. */
-			op.GeoM.Translate(float64(i), float64(newOff))
-
-			/* Draw to buffer */
-			meltBuf.DrawImage(meltStart.SubImage(image.Rect(i, 0, i+1, meltHeight)).(*ebiten.Image), op)
 		}
-
 		/* Draw to screen */
 		var meltScale xycord
 		meltScale.x = screenWidth / meltWidth
@@ -275,6 +278,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Reset()
 		op.GeoM.Scale(meltScale.x, meltScale.y)
 		screen.DrawImage(meltBuf, op)
+		//time.Sleep(time.Millisecond * 29)
+		//time.Sleep(time.Millisecond * 500)
 
 		/* Marked to exit game, quit */
 		if doMelt == 0 && meltQuit {
@@ -285,34 +290,17 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 /* Random offsets for melting */
 func randomizeMelt() {
-	for i := 0; i < meltWidth; i++ {
-		meltOffsets[i] = rand.Intn(meltAmount)
-	}
+	r := 0
+	meltOffsets[0] = rand.Intn(255) % 16
+	for i := 1; i < meltWidth; i++ {
+		r = (rand.Intn(255) % 3) - 1
+		meltOffsets[i] = meltOffsets[i-1] + r
 
-	//Smoothing
-	var a, b, c, d, e, f, g int
-	for i := 0; i < meltWidth; i++ {
-		if i > 2 {
-			a = meltOffsets[i-3]
+		if meltOffsets[i] < 0 {
+			meltOffsets[i] = 1
+		} else if meltOffsets[i] > 15 {
+			meltOffsets[i] = 15
 		}
-		if i > 1 {
-			b = meltOffsets[i-2]
-		}
-		if i > 0 {
-			c = meltOffsets[i-1]
-		}
-		if i >= 0 {
-			d = meltOffsets[i]
-		}
-		if i < meltWidth-1 {
-			e = meltOffsets[i+1]
-		}
-		if i < meltWidth-2 {
-			f = meltOffsets[i+2]
-		}
-		if i < meltWidth-3 {
-			g = meltOffsets[i+3]
-		}
-		meltOffsets[i] = (a + b + c + d + e + f + g) / 7.0
+		fmt.Printf("%v, ", meltOffsets[i])
 	}
 }

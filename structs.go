@@ -24,12 +24,12 @@ const (
 	playerForwardSpeedDiv = 0.5
 
 	/* Screen melt params */
-	meltMag    = screenWidth / 160                            //Emulate 320x200ish, melt is 2 pixels wide
-	meltWidth  = screenWidth / meltMag                        //Figure out res based on magnatude, to keep aspect ratio
-	meltHeight = screenHeight                                 //Half res vertical
-	meltFrames = ((meltHeight + meltAmount) / meltSpeed) + 30 //Wait for enough frames to pass
-	meltSpeed  = 32
-	meltAmount = 512 //Randomness
+	meltMagW   = screenWidth / 160 //Emulate 320x200ish, melt is 2 pixels wide
+	meltMagH   = screenWidth / 200
+	meltWidth  = screenWidth / (meltMagW)        //Figure out res based on magnatude, to keep aspect ratio
+	meltHeight = screenHeight / (meltMagH)       //Half res vertical
+	meltFrames = ((meltHeight) / meltSpeed) + 20 //Wait for enough frames to pass
+	meltSpeed  = 8
 
 	/* Minimap */
 	miniScale = 8
@@ -60,10 +60,11 @@ var (
 	cSmoked   = color.RGBA{0x00, 0x00, 0x00, 0xFF}
 
 	/* Map size, and source image */
-	mapSize ixycord
-	mapImg  *ebiten.Image
-	rayImg  *ebiten.Image
-	miniMap *ebiten.Image
+	mapSize  ixycord
+	mapImg   *ebiten.Image
+	titleImg *ebiten.Image
+	rayImg   *ebiten.Image
+	miniMap  *ebiten.Image
 
 	/* Screen melt buffers and offsets */
 	meltStart   *ebiten.Image  //Converted starting image
