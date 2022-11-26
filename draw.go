@@ -301,6 +301,6 @@ func randomizeMelt() {
 		} else if meltOffsets[i] > 15 {
 			meltOffsets[i] = 15
 		}
-		fmt.Printf("%v, ", meltOffsets[i])
+		//fmt.Printf("%v, ", meltOffsets[i])
 	}
 }
