@@ -7,7 +7,6 @@ import (
 	"math"
 	"math/rand"
 	"os"
-	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -21,7 +20,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	frameNumber++
 
 	/* Process user input */
-	g.processInput(screen)
+	if doMelt == 0 {
+		g.processInput(screen)
+	}
 
 	var s *ebiten.Image //Pointer, so we can screen cap if we want
 
@@ -220,7 +221,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	ebitenutil.DebugPrint(s, fmt.Sprintf("TPS: %0.2f\nFPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS()))
 
-	/* Melt started, grab screen */
 	if doMelt < 0 {
 		doMelt = 1 //start timer
 
@@ -238,12 +238,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		/* Randomize values */
 		randomizeMelt()
-	}
-
-	/* Draw melt */
-	if doMelt > 0 {
-		doMelt++
+	} else if doMelt > 0 {
 		op := &ebiten.DrawImageOptions{}
+		if meltDelay > 0 {
+			meltDelay--
+		} else {
+			doMelt++
+		}
 
 		/* Clear buffer */
 		meltBuf.Fill(color.Transparent)
@@ -274,7 +275,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		if isDone {
 			//fmt.Printf("melt done: %v\n", doMelt)
 			doMelt = 0
+			meltDelay = 0
 		}
+
 		/* Draw to screen */
 		var meltScale xycord
 		meltScale.x = screenWidth / meltWidth
@@ -282,7 +285,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Reset()
 		op.GeoM.Scale(meltScale.x, meltScale.y)
 		screen.DrawImage(meltBuf, op)
-		time.Sleep(time.Millisecond * 100)
+		//time.Sleep(time.Millisecond * 250)
 
 		/* Marked to exit game, quit */
 		if doMelt == 0 && meltQuit {

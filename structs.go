@@ -71,6 +71,7 @@ var (
 	meltOffsets [meltWidth]int //Pixel offsets for melt effect
 	screenSave  *ebiten.Image  //Screen capture
 	meltQuit    = false        //If true, melt is for exiting game
+	meltDelay   = 180          //How long to draw first frame for
 
 	maxDof int //Max depth
 

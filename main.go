@@ -33,12 +33,12 @@ func main() {
 	}
 
 	/* Load default test title */
-	/*
-		titleScreen, _, err = ebitenutil.NewImageFromFile("title.png")
-		if err != nil {
-			fmt.Println(err)
-			return //Exit on error
-		} */
+
+	titleImg, _, err = ebitenutil.NewImageFromFile("title.png")
+	if err != nil {
+		fmt.Println(err)
+		return //Exit on error
+	}
 
 	/* Meltscreen buffers */
 	meltStart = ebiten.NewImage(meltWidth, meltHeight)
@@ -46,14 +46,12 @@ func main() {
 	randomizeMelt() //Randomize values
 	doMelt = 1      //Start timer
 
-	/*
-		op := &ebiten.DrawImageOptions{}
-		var titleSize ixycord
-		titleSize.x, titleSize.y = titleScreen.Size()
-		op.GeoM.Scale(meltWidth/float64(titleSize.x), meltHeight/float64(titleSize.y))
-		meltStart.DrawImage(titleScreen, op)
-	*/
-	meltStart.Fill(cRed)
+	op := &ebiten.DrawImageOptions{}
+	var titleSize ixycord
+	titleSize.x, titleSize.y = titleImg.Size()
+	op.GeoM.Scale(meltWidth/float64(titleSize.x), meltHeight/float64(titleSize.y))
+	meltStart.DrawImage(titleImg, op)
+	//meltStart.Fill(cRed)
 
 	/* Save map size info */
 	xs, ys := mapImg.Size()
