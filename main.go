@@ -47,6 +47,7 @@ func main() {
 	doMelt = 1      //Start timer
 
 	op := &ebiten.DrawImageOptions{}
+	//op.Filter = ebiten.FilterLinear
 	var titleSize ixycord
 	titleSize.x, titleSize.y = titleImg.Size()
 	op.GeoM.Scale(meltWidth/float64(titleSize.x), meltHeight/float64(titleSize.y))
