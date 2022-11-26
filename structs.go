@@ -12,6 +12,8 @@ const (
 	renderFov    = 90        //Degrees
 	screenWidth  = 1280
 	screenHeight = 720
+	meltWidth    = screenWidth
+	meltHeight   = screenHeight
 	screenMag    = 1    //Maginify screen, mosaic
 	mapScale     = 32   //Units per map pixel
 	maxShadow    = 0.01 //Maxiumum darkness out of 1.0
@@ -22,13 +24,6 @@ const (
 	/* Player rotate/move speed */
 	playerRotSpeed        = 2
 	playerForwardSpeedDiv = 0.5
-
-	/* Screen melt params */
-	meltMagW   = screenWidth / 320 //Emulate 320x200ish, melt is 2 pixels wide
-	meltMagH   = screenHeight / 200
-	meltWidth  = screenWidth / (meltMagW)  //Figure out res based on magnatude, to keep aspect ratio
-	meltHeight = screenHeight / (meltMagH) //Half res vertical
-	meltSpeed  = 8
 
 	/* Minimap */
 	miniScale = 8
@@ -69,11 +64,13 @@ var (
 	meltStart   *ebiten.Image  //Converted starting image
 	meltBuf     *ebiten.Image  //Melt effect output
 	meltOffsets [meltWidth]int //Pixel offsets for melt effect
-	screenSave  *ebiten.Image  //Screen capture
-	meltQuit    = false        //If true, melt is for exiting game
-	meltDelay   = 180          //How long to draw first frame for
 
-	maxDof int //Max depth
+	screenSave *ebiten.Image //Screen capture
+	meltQuit   = false       //If true, melt is for exiting game
+	meltDelay  = 60          //How long to draw first frame for
+	/* Screen melt params */
+	meltSpeed = (screenHeight / 200) * 4
+	maxDof    int //Max depth
 
 	playerPhysics pPhysics //Player pos/rot/movepos
 )

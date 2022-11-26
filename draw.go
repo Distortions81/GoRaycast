@@ -252,7 +252,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		/* Loop through each column */
 		for i := 0; i < meltWidth; i++ {
-			d := i * 2
+			d := i
 			op.GeoM.Reset()
 			offset := meltOffsets[i]
 
@@ -267,7 +267,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			op.GeoM.Translate(float64(d), float64(newOff))
 
 			/* Draw to buffer */
-			meltBuf.DrawImage(meltStart.SubImage(image.Rect(d, 0, d+2, meltHeight)).(*ebiten.Image), op)
+			meltBuf.DrawImage(meltStart.SubImage(image.Rect(d, 0, d+1, meltHeight)).(*ebiten.Image), op)
 			if newOff < meltHeight+10 {
 				isDone = false
 			}
@@ -285,7 +285,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Reset()
 		op.GeoM.Scale(meltScale.x, meltScale.y)
 		screen.DrawImage(meltBuf, op)
-		//time.Sleep(time.Millisecond * 250)
+		//time.Sleep(time.Millisecond * 500)
 
 		/* Marked to exit game, quit */
 		if doMelt == 0 && meltQuit {
@@ -298,7 +298,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 func randomizeMelt() {
 	r := 0
 	meltOffsets[0] = rand.Intn(255) % 16
-	for i := 1; i < meltWidth/2; i++ {
+	for i := 1; i < meltWidth; i++ {
 		r = (rand.Intn(255) % 3) - 1
 		meltOffsets[i] = meltOffsets[i-1] + r
 
