@@ -204,7 +204,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			/* Draw the vertical line! */
 			//Draw ray lines here, to rayImg
 			if rayNum%miniRayMod == 0 {
-				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerPhysics.Position.x/mapScale)*miniScale, (playerPhysics.Position.y/mapScale)*miniScale, cGray)
+				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerPhysics.Position.x/mapScale)*miniScale, (playerPhysics.Position.y/mapScale)*miniScale, cRay)
 			}
 			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
 		}

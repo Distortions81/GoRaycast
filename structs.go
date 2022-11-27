@@ -10,8 +10,8 @@ import (
 const (
 	maxDist      = 1000000.0 //Used to signify no wall found
 	renderFov    = 90        //Degrees
-	screenWidth  = 1280
-	screenHeight = 720
+	screenWidth  = 1920
+	screenHeight = 1080
 	meltWidth    = screenWidth
 	meltHeight   = screenHeight
 	screenMag    = 1   //Maginify screen, mosaic
@@ -26,8 +26,8 @@ const (
 	playerForwardSpeedDiv = 0.5
 
 	/* Minimap */
-	miniScale  = 16
-	miniRayMod = screenWidth / 350
+	miniScale  = screenWidth / 120
+	miniRayMod = screenWidth / 320
 
 	/* Commonly used radians values */
 	threePi   = math.Pi * 3.0
@@ -49,7 +49,7 @@ var (
 
 	/* Some predfined colors */
 	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
-	cGray     = color.RGBA{0x40, 0x40, 0x40, 0xFF}
+	cRay      = color.RGBA{0x60, 0x50, 0x40, 0xFF}
 	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
