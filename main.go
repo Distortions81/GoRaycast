@@ -26,7 +26,7 @@ func main() {
 	screenSave.Fill(color.Black) //Clear screen
 
 	/* Load default test map */
-	mapImg, _, err = ebitenutil.NewImageFromFile("data/map1c.png")
+	mapImg, _, err = ebitenutil.NewImageFromFile("data/textures/levels/map1c.png")
 	if err != nil {
 		fmt.Println(err)
 		return //Exit on error
@@ -34,7 +34,7 @@ func main() {
 
 	/* Load default test title */
 
-	titleImg, _, err = ebitenutil.NewImageFromFile("data/title.png")
+	titleImg, _, err = ebitenutil.NewImageFromFile("data/textures/intermission/title.png")
 	if err != nil {
 		fmt.Println(err)
 		return //Exit on error
