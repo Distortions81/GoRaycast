@@ -199,7 +199,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			gc := ((((float64(g) / shade) * d) / 255.0) - 1.0) * 0.7
 			bc := ((((float64(b) / shade) * d) / 255.0) - 1.0) * 0.7
 
-			/* Draw the vertical line! */
 			//Draw ray lines here, to rayImg
 			if rayNum%miniRayMod == 0 {
 				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerPhysics.Position.x/mapScale)*miniScale, (playerPhysics.Position.y/mapScale)*miniScale, cRay)
@@ -229,11 +228,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		}
 	}
 
+	/* Draw rays */
+	op := &ebiten.DrawImageOptions{}
+	miniMap.DrawImage(rayImg, op)
 	/* Draw player */
 	ebitenutil.DrawCircle(miniMap, ((playerPhysics.Position.x / mapScale) * miniScale), ((playerPhysics.Position.y / mapScale) * miniScale), 4, cYellow)
 	/* Draw to screen */
-	op := &ebiten.DrawImageOptions{}
-	miniMap.DrawImage(rayImg, op)
 	op.GeoM.Translate(screenWidth-float64((mapSize.x+1)*miniScale), miniScale)
 	op.ColorM.Scale(1, 1, 1, 0.5)
 	screen.DrawImage(miniMap, op)
