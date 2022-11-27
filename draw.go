@@ -37,6 +37,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	/* Move ray counter-clockwise from center, half our FOV */
 	rayAngle := fixRad(playerPhysics.Rotation + halfFovRad)
 
+	rayImg.Fill(color.Transparent)
+
 	/* Cast rays */
 	for rayNum := 0; rayNum < screenWidth; rayNum++ {
 
@@ -52,6 +54,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		var finalColor color.Color
 		var wallWasHorizontal = false //Used for shading
 		finalColor = color.White
+		var finalRayPosition xycord
 
 		/* Reset offsets */
 		offset.x = 0
@@ -80,6 +83,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			offset.x = -mapScale
 			offset.y = -offset.x * tanRayAngle
 		} else {
+			offset.x = 0
+			offset.y = 0
 			verticalRayPosition.x = playerPhysics.Position.x
 			verticalRayPosition.y = playerPhysics.Position.y
 			currentDepth = maxDof // Skip loop
@@ -123,6 +128,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			offset.y = mapScale
 			offset.x = -offset.y * iTanRayAngle
 		} else {
+			offset.x = 0
+			offset.y = 0
 			horizontalRayPosition.x = playerPhysics.Position.x
 			horizontalRayPosition.y = playerPhysics.Position.y
 			currentDepth = maxDof // Skip loop
@@ -159,9 +166,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				finalDistance = horizontalDistance
 				finalColor = horizontalColor
 				wallWasHorizontal = true //For shading
+				finalRayPosition = horizontalRayPosition
 			} else {
 				finalDistance = verticalDistance
 				finalColor = verticalColor
+				finalRayPosition = verticalRayPosition
 			}
 		}
 
@@ -194,6 +203,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 			/* Draw the vertical line! */
 			//Draw ray lines here, to rayImg
+			if rayNum%miniRayMod == 0 {
+				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerPhysics.Position.x/mapScale)*miniScale, (playerPhysics.Position.y/mapScale)*miniScale, cGray)
+			}
 			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
 		}
 
@@ -215,6 +227,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	ebitenutil.DrawCircle(miniMap, ((playerPhysics.Position.x / mapScale) * miniScale), ((playerPhysics.Position.y / mapScale) * miniScale), 4, cYellow)
 	/* Draw to screen */
 	op := &ebiten.DrawImageOptions{}
+	miniMap.DrawImage(rayImg, op)
 	op.GeoM.Translate(screenWidth-float64((mapSize.x+1)*miniScale), miniScale)
 	op.ColorM.Scale(1, 1, 1, 0.5)
 	screen.DrawImage(miniMap, op)

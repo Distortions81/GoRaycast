@@ -33,8 +33,14 @@ func main() {
 	}
 
 	/* Load default test title */
-
 	titleImg, _, err = ebitenutil.NewImageFromFile("data/textures/intermission/title.png")
+	if err != nil {
+		fmt.Println(err)
+		return //Exit on error
+	}
+
+	/* Load default test wall */
+	wallImg, _, err = ebitenutil.NewImageFromFile("data/textures/walls/white-brick1.png")
 	if err != nil {
 		fmt.Println(err)
 		return //Exit on error

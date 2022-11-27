@@ -26,7 +26,8 @@ const (
 	playerForwardSpeedDiv = 0.5
 
 	/* Minimap */
-	miniScale = 8
+	miniScale  = 16
+	miniRayMod = screenWidth / 350
 
 	/* Commonly used radians values */
 	threePi   = math.Pi * 3.0
@@ -48,6 +49,7 @@ var (
 
 	/* Some predfined colors */
 	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
+	cGray     = color.RGBA{0x40, 0x40, 0x40, 0xFF}
 	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
@@ -57,6 +59,7 @@ var (
 	mapSize  ixycord
 	mapImg   *ebiten.Image
 	titleImg *ebiten.Image
+	wallImg  *ebiten.Image
 	rayImg   *ebiten.Image
 	miniMap  *ebiten.Image
 
