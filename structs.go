@@ -14,7 +14,7 @@ const (
 	screenHeight    = 720
 	meltWidth       = screenWidth
 	meltHeight      = screenHeight
-	wallHeightRatio = 1.3
+	wallHeightRatio = 1.0
 	screenMag       = 1 //Maginify screen, mosaic
 	mapScale        = 1 //Units per map pixel
 
