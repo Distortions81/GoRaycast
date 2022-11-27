@@ -49,7 +49,7 @@ var (
 
 	/* Some predfined colors */
 	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
-	cRay      = color.RGBA{0x60, 0x50, 0x40, 0xFF}
+	cRay      = color.RGBA{0x60, 0x50, 0x30, 0xFF}
 	cYellow   = color.RGBA{0xFF, 0xAA, 0x00, 0xFF}
 	cRed      = color.RGBA{0xFF, 0x00, 0x00, 0xFF}
 	cGreen    = color.RGBA{0x00, 0xFF, 0x00, 0xFF}
@@ -57,6 +57,7 @@ var (
 
 	/* Map size, and source image */
 	mapSize  ixycord
+	wallSize ixycord
 	mapImg   *ebiten.Image
 	titleImg *ebiten.Image
 	wallImg  *ebiten.Image

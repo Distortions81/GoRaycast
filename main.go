@@ -45,6 +45,9 @@ func main() {
 		fmt.Println(err)
 		return //Exit on error
 	}
+	wsx, wsy := wallImg.Size()
+	wallSize.x = wsx
+	wallSize.y = wsy
 
 	/* Meltscreen buffers */
 	meltStart = ebiten.NewImage(meltWidth, meltHeight)

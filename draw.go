@@ -160,6 +160,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			}
 		}
 
+		imgRow := 0
 		//Use shortest vector, if any found
 		if horizontalDistance < maxDist || verticalDistance < maxDist {
 			if horizontalDistance < verticalDistance {
@@ -167,10 +168,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				finalColor = horizontalColor
 				wallWasHorizontal = true //For shading
 				finalRayPosition = horizontalRayPosition
+				imgRow = int((float64(finalRayPosition.x/mapScale - math.Floor(finalRayPosition.x/mapScale))) * float64(wallSize.x))
 			} else {
 				finalDistance = verticalDistance
 				finalColor = verticalColor
 				finalRayPosition = verticalRayPosition
+				imgRow = int((float64(finalRayPosition.y/mapScale - math.Floor(finalRayPosition.y/mapScale))) * float64(wallSize.x))
 			}
 		}
 
@@ -207,6 +210,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerPhysics.Position.x/mapScale)*miniScale, (playerPhysics.Position.y/mapScale)*miniScale, cRay)
 			}
 			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
+
+			op := &ebiten.DrawImageOptions{}
+			op.GeoM.Scale(1, mapScale/finalDistance)
+			op.GeoM.Translate(float64(rayNum), screenHeight/2)
+			s.DrawImage(wallImg.SubImage(image.Rect(imgRow, 0, imgRow+1, wallSize.y)).(*ebiten.Image), op)
 		}
 
 		/* Advance ray angle */
