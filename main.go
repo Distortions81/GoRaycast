@@ -78,7 +78,7 @@ func main() {
 	rayImg = ebiten.NewImage(miniScale*mapSize.x, miniScale*mapSize.y)
 
 	/* Calculate reasonable max depth */
-	maxDof = ((xs + ys) / 2) * 2
+	maxDof = shadowDistance
 
 	/* Precalc fov values */
 	renderFovRad = degToRad(renderFov)

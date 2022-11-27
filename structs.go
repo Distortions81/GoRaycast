@@ -10,8 +10,9 @@ import (
 const (
 	maxDist      = 1000000.0 //Used to signify no wall found
 	renderFov    = 90        //Degrees
-	screenWidth  = 1920
-	screenHeight = 1080
+	screenWidth  = 1280
+	screenHeight = 720
+	doJitter     = false //Jitter, for fake AA
 	meltWidth    = screenWidth
 	meltHeight   = screenHeight
 	screenMag    = 1 //Maginify screen, mosaic
