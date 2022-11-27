@@ -37,7 +37,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	//s.Fill(cBG)
 
 	/* Move ray counter-clockwise from center, half our FOV */
+	jitter := 0.0
 	rayAngle := fixRad(playerPhysics.Rotation + halfFovRad)
+	if doJitter && frameNumber%2 == 0 {
+		rayAngle += radPerRay / 2
+		jitter = 0.5
+	}
 
 	rayImg.Fill(color.Transparent)
 
@@ -210,7 +215,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			//op.Filter = ebiten.FilterLinear
 			op.GeoM.Translate(0, -float64(wallSize.y/2.0))
 			op.GeoM.Scale(1, (mapScale/wallHeightRatio)/finalDistance)
-			op.GeoM.Translate(float64(rayNum), (screenHeight / 2.0))
+			op.GeoM.Translate(float64(rayNum), (screenHeight/2.0)+jitter)
 			op.ColorM.Scale(rc, gc, bc, 1.0) //Apply wall color
 			op.ColorM.Scale(d, d, d, 1.0)    //Apply shading and depth
 			s.DrawImage(wallImg.SubImage(image.Rect(imgRow, 0, imgRow+1, wallSize.y)).(*ebiten.Image), op)
