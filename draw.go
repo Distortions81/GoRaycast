@@ -209,11 +209,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			if rayNum%miniRayMod == 0 {
 				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerPhysics.Position.x/mapScale)*miniScale, (playerPhysics.Position.y/mapScale)*miniScale, cRay)
 			}
-			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 1, lh, color.RGBA{red, green, blue, 0xFF})
+			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 0, lh, color.RGBA{red, green, blue, 0xFF})
 
 			op := &ebiten.DrawImageOptions{}
+			//op.Filter = ebiten.FilterLinear
+			op.GeoM.Translate(0, -float64(wallSize.y/2.0))
 			op.GeoM.Scale(1, mapScale/finalDistance)
-			op.GeoM.Translate(float64(rayNum), screenHeight/2)
+			op.GeoM.Translate(float64(rayNum), (screenHeight / 2.0))
 			s.DrawImage(wallImg.SubImage(image.Rect(imgRow, 0, imgRow+1, wallSize.y)).(*ebiten.Image), op)
 		}
 
