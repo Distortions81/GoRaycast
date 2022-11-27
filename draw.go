@@ -181,17 +181,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		if finalDistance < maxDist {
 
 			//Ray length, scaled to map size
-			lh := (float64(mapSize.y) * screenHeight) / finalDistance
+			lh := (mapScale * float64(wallSize.y)) / finalDistance
 
 			/* Color of map block */
 			r, g, b, _ := finalColor.RGBA()
 			d := (float64(mapSize.y+mapSize.x) / (finalDistance))
 
 			/* Clip brightness */
-			if d < maxShadow {
-				d = maxShadow
-			} else if d > 1 {
-				d = 1
+			if d > 0.5 {
+				d = 0.5
 			}
 
 			/* Made horizontal walls darker, faux shading */
@@ -200,23 +198,30 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				shade = 256.0 * (dirShading)
 			}
 
-			red := uint8(((float64(r) / shade) * d))
-			green := uint8(((float64(g) / shade) * d))
-			blue := uint8(((float64(b) / shade) * d))
+			rc := ((((float64(r) / shade) * d) / 255.0) - 1.0) * 0.7
+			gc := ((((float64(g) / shade) * d) / 255.0) - 1.0) * 0.7
+			bc := ((((float64(b) / shade) * d) / 255.0) - 1.0) * 0.7
 
 			/* Draw the vertical line! */
 			//Draw ray lines here, to rayImg
 			if rayNum%miniRayMod == 0 {
 				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerPhysics.Position.x/mapScale)*miniScale, (playerPhysics.Position.y/mapScale)*miniScale, cRay)
 			}
-			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 0, lh, color.RGBA{red, green, blue, 0xFF})
 
+			/* Draw textures */
 			op := &ebiten.DrawImageOptions{}
 			//op.Filter = ebiten.FilterLinear
 			op.GeoM.Translate(0, -float64(wallSize.y/2.0))
 			op.GeoM.Scale(1, mapScale/finalDistance)
 			op.GeoM.Translate(float64(rayNum), (screenHeight / 2.0))
+			op.ColorM.Translate(rc, gc, bc, 1.0)
 			s.DrawImage(wallImg.SubImage(image.Rect(imgRow, 0, imgRow+1, wallSize.y)).(*ebiten.Image), op)
+
+			//Lines
+			red := uint8(((float64(r) / shade) * d))
+			green := uint8(((float64(g) / shade) * d))
+			blue := uint8(((float64(b) / shade) * d))
+			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 0, lh, color.RGBA{red, green, blue, 0xAA})
 		}
 
 		/* Advance ray angle */
