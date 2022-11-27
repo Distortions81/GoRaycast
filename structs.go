@@ -22,12 +22,12 @@ const (
 	 * Offset distance, so less than one unit
 	 * of space does not over expose
 	 */
-	distanceOffset = shadowDistance / 10 //added to distance
-	shadowDistance = 64                  //Shadow is divide by this, sets how far we can see
-	FalloffRatio   = 16                  //Square root multiplied by this
-	shadowBase     = 1.0                 //The shadow is divided by this
-	shadowExp      = 3                   //Lighting exponent value
-	shadowClip     = 1                   //Don't go brighter than this value
+	distanceOffset = 8   //added to distance
+	shadowDistance = 128 //Shadow is divide by this, sets how far we can see
+	FalloffRatio   = 16  //Square root multiplied by this
+	shadowBase     = 2   //The shadow is divided by this
+	shadowExp      = 4   //Lighting exponent value
+	shadowClip     = 1.0 //Don't go brighter than this value
 
 	/* Shade horizontal walls a bit, faux shading */
 	normalShading = 1.0
