@@ -182,22 +182,21 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 			/* Color of map block */
 			r, g, b, _ := finalColor.RGBA()
-			d := (float64(mapSize.y+mapSize.x) / (finalDistance))
-
-			/* Clip brightness */
-			if d > 0.5 {
-				d = 0.5
-			}
+			d := shadowBase / (math.Sqrt(math.Pow(finalDistance+distanceOffset, shadowExp)*FalloffRatio) / shadowDistance)
 
 			/* Made horizontal walls darker, faux shading */
-			shade := 256.0
+			shade := normalShading
 			if wallWasHorizontal {
-				shade = 256.0 * (dirShading)
+				shade = dirShading
 			}
+			if d > shadowClip {
+				d = shadowClip
+			}
+			d = d * shade
 
-			rc := ((((float64(r) / shade) * d) / 255.0) - 1.0) * 0.7
-			gc := ((((float64(g) / shade) * d) / 255.0) - 1.0) * 0.7
-			bc := ((((float64(b) / shade) * d) / 255.0) - 1.0) * 0.7
+			rc := (float64(r) / 0xFFFF)
+			gc := (float64(g) / 0xFFFF)
+			bc := (float64(b) / 0xFFFF)
 
 			//Draw ray lines here, to rayImg
 			if rayNum%miniRayMod == 0 {
@@ -208,9 +207,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			op := &ebiten.DrawImageOptions{}
 			//op.Filter = ebiten.FilterLinear
 			op.GeoM.Translate(0, -float64(wallSize.y/2.0))
-			op.GeoM.Scale(1, mapScale/finalDistance)
+			op.GeoM.Scale(1, (mapScale/wallHeightRatio)/finalDistance)
 			op.GeoM.Translate(float64(rayNum), (screenHeight / 2.0))
-			op.ColorM.Translate(rc, gc, bc, 1.0)
+			op.ColorM.Scale(rc, gc, bc, 1.0) //Apply wall color
+			op.ColorM.Scale(d, d, d, 1.0)    //Apply shading and depth
 			s.DrawImage(wallImg.SubImage(image.Rect(imgRow, 0, imgRow+1, wallSize.y)).(*ebiten.Image), op)
 		}
 

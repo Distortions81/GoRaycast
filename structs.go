@@ -8,22 +8,34 @@ import (
 )
 
 const (
-	maxDist      = 1000000.0 //Used to signify no wall found
-	renderFov    = 90        //Degrees
-	screenWidth  = 1920
-	screenHeight = 1080
-	meltWidth    = screenWidth
-	meltHeight   = screenHeight
-	screenMag    = 1   //Maginify screen, mosaic
-	mapScale     = 32  //Units per map pixel
-	maxShadow    = 0.1 //Maxiumum darkness out of 1.0
+	maxDist         = 1000000.0 //Used to signify no wall found
+	renderFov       = 60        //Degrees
+	screenWidth     = 1280
+	screenHeight    = 720
+	meltWidth       = screenWidth
+	meltHeight      = screenHeight
+	wallHeightRatio = 1.0
+	screenMag       = 1 //Maginify screen, mosaic
+	mapScale        = 1 //Units per map pixel
+
+	/*
+	 * Offset distance, so less than one unit
+	 * of space does not over expose
+	 */
+	distanceOffset = 1.9 //added to distance
+	shadowDistance = 32  //Shadow is divide by this, sets how far we can see
+	FalloffRatio   = 16  //Square root multiplied by this
+	shadowBase     = 1.0 //The shadow is divided by this
+	shadowExp      = 3   //Lighting exponent value
+	shadowClip     = 1   //Don't go brighter than this value
 
 	/* Shade horizontal walls a bit, faux shading */
-	dirShading = 2.0 //2.0 would be 50% darker on horizontal walls
+	normalShading = 1.0
+	dirShading    = 0.8 //1.0 no shading, 0.5 darken by 50%
 
 	/* Player rotate/move speed */
 	playerRotSpeed        = 2
-	playerForwardSpeedDiv = 0.5
+	playerForwardSpeedDiv = 10
 
 	/* Minimap */
 	miniScale  = screenWidth / 120
@@ -71,7 +83,7 @@ var (
 
 	screenSave *ebiten.Image //Screen capture
 	meltQuit   = false       //If true, melt is for exiting game
-	meltDelay  = 60          //How long to draw first frame for
+	meltDelay  = 120         //How long to draw first frame for
 	/* Screen melt params */
 	meltSpeed = (screenHeight / 200) * 4
 	maxDof    int //Max depth
