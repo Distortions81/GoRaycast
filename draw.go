@@ -34,6 +34,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		s = screen
 	}
 
+	//s.Fill(cBG)
+
 	/* Move ray counter-clockwise from center, half our FOV */
 	rayAngle := fixRad(playerPhysics.Rotation + halfFovRad)
 
