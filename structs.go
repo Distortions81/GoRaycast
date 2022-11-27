@@ -8,15 +8,14 @@ import (
 )
 
 const (
-	maxDist         = 1000000.0 //Used to signify no wall found
-	renderFov       = 90        //Degrees
-	screenWidth     = 1280
-	screenHeight    = 720
-	meltWidth       = screenWidth
-	meltHeight      = screenHeight
-	wallHeightRatio = 1.0
-	screenMag       = 1 //Maginify screen, mosaic
-	mapScale        = 1 //Units per map pixel
+	maxDist      = 1000000.0 //Used to signify no wall found
+	renderFov    = 90        //Degrees
+	screenWidth  = 1920
+	screenHeight = 1080
+	meltWidth    = screenWidth
+	meltHeight   = screenHeight
+	screenMag    = 1 //Maginify screen, mosaic
+	mapScale     = 1 //Units per map pixel
 
 	/*
 	 * Offset distance, so less than one unit
@@ -53,11 +52,12 @@ const (
 )
 
 var (
-	frameNumber  uint64
-	doMelt       int     //-1 to start timer, otherwise number of frames remaining
-	renderFovRad float64 //FoV in radians
-	halfFovRad   float64 //Half fov, to setup
-	radPerRay    float64 //Radians to add per ray
+	frameNumber     uint64
+	doMelt          int     //-1 to start timer, otherwise number of frames remaining
+	renderFovRad    float64 //FoV in radians
+	halfFovRad      float64 //Half fov, to setup
+	radPerRay       float64 //Radians to add per ray
+	wallHeightRatio = 1.0
 
 	/* Some predfined colors */
 	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
