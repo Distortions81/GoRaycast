@@ -180,9 +180,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		/* Draw rays */
 		if finalDistance < maxDist {
 
-			//Ray length, scaled to map size
-			lh := (mapScale * float64(wallSize.y)) / finalDistance
-
 			/* Color of map block */
 			r, g, b, _ := finalColor.RGBA()
 			d := (float64(mapSize.y+mapSize.x) / (finalDistance))
@@ -216,12 +213,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			op.GeoM.Translate(float64(rayNum), (screenHeight / 2.0))
 			op.ColorM.Translate(rc, gc, bc, 1.0)
 			s.DrawImage(wallImg.SubImage(image.Rect(imgRow, 0, imgRow+1, wallSize.y)).(*ebiten.Image), op)
-
-			//Lines
-			red := uint8(((float64(r) / shade) * d))
-			green := uint8(((float64(g) / shade) * d))
-			blue := uint8(((float64(b) / shade) * d))
-			ebitenutil.DrawRect(s, float64(rayNum), (screenHeight/2.0)-(lh/2.0), 0, lh, color.RGBA{red, green, blue, 0xAA})
 		}
 
 		/* Advance ray angle */
