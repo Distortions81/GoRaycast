@@ -19,7 +19,7 @@ const (
 	maxShadow    = 0.1 //Maxiumum darkness out of 1.0
 
 	/* Shade horizontal walls a bit, faux shading */
-	dirShading = 1.25 //2.0 would be 50% darker on horizontal walls
+	dirShading = 2.0 //2.0 would be 50% darker on horizontal walls
 
 	/* Player rotate/move speed */
 	playerRotSpeed        = 2
