@@ -9,12 +9,12 @@ import (
 
 const (
 	maxDist         = 1000000.0 //Used to signify no wall found
-	renderFov       = 60        //Degrees
+	renderFov       = 90        //Degrees
 	screenWidth     = 1280
 	screenHeight    = 720
 	meltWidth       = screenWidth
 	meltHeight      = screenHeight
-	wallHeightRatio = 1.0
+	wallHeightRatio = 1.3
 	screenMag       = 1 //Maginify screen, mosaic
 	mapScale        = 1 //Units per map pixel
 
