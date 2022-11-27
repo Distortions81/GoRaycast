@@ -22,16 +22,16 @@ const (
 	 * Offset distance, so less than one unit
 	 * of space does not over expose
 	 */
-	distanceOffset = 8   //added to distance
-	shadowDistance = 128 //Shadow is divide by this, sets how far we can see
-	FalloffRatio   = 16  //Square root multiplied by this
-	shadowBase     = 2   //The shadow is divided by this
-	shadowExp      = 4   //Lighting exponent value
-	shadowClip     = 1.0 //Don't go brighter than this value
+	distanceOffset = shadowDistance / 4 //added to distance
+	shadowDistance = 16                 //Shadow is divide by this, sets how far we can see
+	FalloffRatio   = 16                 //Square root multiplied by this
+	shadowBase     = 2                  //The shadow is divided by this
+	shadowExp      = 2.4                //Lighting exponent value
+	shadowClip     = 1.2                //Don't go brighter than this value
 
 	/* Shade horizontal walls a bit, faux shading */
 	normalShading = 1.0
-	dirShading    = 0.8 //1.0 no shading, 0.8 darkens by 20%
+	dirShading    = 0.85 //1.0 no shading, 0.85 darkens by 15%
 
 	/* Player rotate/move speed */
 	playerRotSpeed        = 2
