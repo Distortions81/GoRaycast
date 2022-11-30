@@ -9,13 +9,13 @@ import (
 
 const (
 	maxDist      = 1000000.0 //Used to signify no wall found
-	renderFov    = 45        //Degrees
+	renderFov    = 60        //Degrees
 	screenWidth  = 1280
 	screenHeight = 720
 	doJitter     = false //Jitter, for fake AA
 	meltWidth    = screenWidth
 	meltHeight   = screenHeight
-	screenMag    = 3 //Maginify screen, mosaic
+	screenMag    = 1 //Maginify screen, mosaic
 	mapScale     = 1 //Units per map pixel
 
 	/*
@@ -34,7 +34,7 @@ const (
 	dirShading    = 0.85 //1.0 no shading, 0.85 darkens by 15%
 
 	/* Player rotate/move speed */
-	playerRotSpeed        = 1.5
+	playerRotSpeed        = 1.25
 	playerForwardSpeedDiv = 10
 
 	/* Minimap */
@@ -58,7 +58,7 @@ var (
 	renderFovRad    float64 //FoV in radians
 	halfFovRad      float64 //Half fov, to setup
 	radPerRay       float64 //Radians to add per ray
-	wallHeightRatio = 0.66
+	wallHeightRatio = 1.0
 
 	/* Some predfined colors */
 	cDarkGray = color.RGBA{0x20, 0x20, 0x20, 0xFF}
