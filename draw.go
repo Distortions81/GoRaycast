@@ -73,22 +73,27 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		tanRayAngle := math.Tan(rayAngle)
 		iTanRayAngle := 1.0 / tanRayAngle
 
+		/* Project rays from a plane */
+		rayStart := playerData.Position
+		rayStart.x += cosRayAngle / math.Cos(rayAngle-playerData.Rotation) / onePi
+		rayStart.y -= sinRayAngle / math.Cos(rayAngle-playerData.Rotation) / onePi
+
 		/* Check Vertical Lines */
 		if cosRayAngle > 0.001 { /* Looking left */
-			verticalRayPosition.x = math.Floor(playerData.Position.x/mapScale)*mapScale + mapScale
-			verticalRayPosition.y = (playerData.Position.x-verticalRayPosition.x)*tanRayAngle + playerData.Position.y
+			verticalRayPosition.x = math.Floor(rayStart.x/mapScale)*mapScale + mapScale
+			verticalRayPosition.y = (rayStart.x-verticalRayPosition.x)*tanRayAngle + rayStart.y
 			offset.x = mapScale
 			offset.y = -offset.x * tanRayAngle
 		} else if cosRayAngle < -0.001 { /* Looking right */
-			verticalRayPosition.x = math.Floor(playerData.Position.x/mapScale)*mapScale - 0.0001
-			verticalRayPosition.y = (playerData.Position.x-verticalRayPosition.x)*tanRayAngle + playerData.Position.y
+			verticalRayPosition.x = math.Floor(rayStart.x/mapScale)*mapScale - 0.0001
+			verticalRayPosition.y = (rayStart.x-verticalRayPosition.x)*tanRayAngle + rayStart.y
 			offset.x = -mapScale
 			offset.y = -offset.x * tanRayAngle
 		} else {
 			offset.x = 0
 			offset.y = 0
-			verticalRayPosition.x = playerData.Position.x
-			verticalRayPosition.y = playerData.Position.y
+			verticalRayPosition.x = rayStart.x
+			verticalRayPosition.y = rayStart.y
 			currentDepth = maxDof // Skip loop
 		}
 
@@ -101,7 +106,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				verticalColor = mapImg.At(int(verticalRayPosition.x/mapScale), int(verticalRayPosition.y/mapScale))
 				if r, g, b, _ := verticalColor.RGBA(); r > 0 || g > 0 || b > 0 {
 					/* Calc distance, save, exit */
-					verticalDistance = distance(playerData.Position, verticalRayPosition)
+					verticalDistance = distance(rayStart, verticalRayPosition)
 					currentDepth = maxDof
 				} else {
 					/* advance down the ray angle */
@@ -120,20 +125,20 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		/* Check Horizontal Lines */
 		if sinRayAngle > 0.001 { /* Looking north */
-			horizontalRayPosition.y = math.Floor(playerData.Position.y/mapScale)*mapScale - 0.0001
-			horizontalRayPosition.x = (playerData.Position.y-horizontalRayPosition.y)*iTanRayAngle + playerData.Position.x
+			horizontalRayPosition.y = math.Floor(rayStart.y/mapScale)*mapScale - 0.0001
+			horizontalRayPosition.x = (rayStart.y-horizontalRayPosition.y)*iTanRayAngle + rayStart.x
 			offset.y = -mapScale
 			offset.x = -offset.y * iTanRayAngle
 		} else if sinRayAngle < -0.001 { /* Looking south */
-			horizontalRayPosition.y = math.Floor(playerData.Position.y/mapScale)*mapScale + mapScale
-			horizontalRayPosition.x = (playerData.Position.y-horizontalRayPosition.y)*iTanRayAngle + playerData.Position.x
+			horizontalRayPosition.y = math.Floor(rayStart.y/mapScale)*mapScale + mapScale
+			horizontalRayPosition.x = (rayStart.y-horizontalRayPosition.y)*iTanRayAngle + rayStart.x
 			offset.y = mapScale
 			offset.x = -offset.y * iTanRayAngle
 		} else {
 			offset.x = 0
 			offset.y = 0
-			horizontalRayPosition.x = playerData.Position.x
-			horizontalRayPosition.y = playerData.Position.y
+			horizontalRayPosition.x = rayStart.x
+			horizontalRayPosition.y = rayStart.y
 			currentDepth = maxDof // Skip loop
 		}
 
@@ -148,7 +153,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 				if r, g, b, _ := horizontalColor.RGBA(); r > 0 || g > 0 || b > 0 {
 					/* Calc distance, save, exit */
-					horizontalDistance = distance(playerData.Position, horizontalRayPosition)
+					horizontalDistance = distance(rayStart, horizontalRayPosition)
 					currentDepth = maxDof
 				} else {
 					/* advance down the ray angle */
@@ -205,7 +210,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 			//Draw ray lines here, to rayImg
 			if rayNum%miniRayMod == 0 {
-				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (playerData.Position.x/mapScale)*miniScale, (playerData.Position.y/mapScale)*miniScale, cRay)
+				ebitenutil.DrawLine(rayImg, (finalRayPosition.x/mapScale)*miniScale, (finalRayPosition.y/mapScale)*miniScale, (rayStart.x/mapScale)*miniScale, (rayStart.y/mapScale)*miniScale, cRay)
 			}
 
 			/* Draw textures */

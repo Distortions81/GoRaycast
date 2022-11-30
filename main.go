@@ -48,11 +48,6 @@ func main() {
 	wsx, wsy := wallImg.Size()
 	wallSize.x = wsx
 	wallSize.y = wsy
-	if wallSize.y < screenHeight {
-		wallHeightRatio = float64(screenHeight / wallSize.y)
-	} else {
-		wallHeightRatio = float64(wallSize.y / screenHeight)
-	}
 
 	/* Meltscreen buffers */
 	meltStart = ebiten.NewImage(meltWidth, meltHeight)
