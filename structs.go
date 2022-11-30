@@ -9,7 +9,7 @@ import (
 
 const (
 	maxDist      = 1000000.0 //Used to signify no wall found
-	renderFov    = 90        //Degrees
+	renderFov    = 60        //Degrees
 	screenWidth  = 1280
 	screenHeight = 720
 	doJitter     = false //Jitter, for fake AA
@@ -23,7 +23,7 @@ const (
 	 * of space does not over expose
 	 */
 	distanceOffset = shadowDistance / 4 //added to distance
-	shadowDistance = 16                 //Shadow is divide by this, sets how far we can see
+	shadowDistance = 8                  //Shadow is divide by this, sets how far we can see
 	FalloffRatio   = 16                 //Square root multiplied by this
 	shadowBase     = 2                  //The shadow is divided by this
 	shadowExp      = 2.4                //Lighting exponent value
@@ -34,7 +34,7 @@ const (
 	dirShading    = 0.85 //1.0 no shading, 0.85 darkens by 15%
 
 	/* Player rotate/move speed */
-	playerRotSpeed        = 2
+	playerRotSpeed        = 1.5
 	playerForwardSpeedDiv = 10
 
 	/* Minimap */
@@ -91,11 +91,11 @@ var (
 	meltSpeed = (screenHeight / 200) * 4
 	maxDof    int //Max depth
 
-	playerPhysics pPhysics //Player pos/rot/movepos
+	playerData playerDataType //Player pos/rot/movepos
 )
 
 /* Player info */
-type pPhysics struct {
+type playerDataType struct {
 	Position xycord
 	Rotation float64
 	MovePos  xycord

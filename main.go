@@ -13,9 +13,9 @@ func main() {
 	var err error
 
 	/* Player starting pos/rot */
-	playerPhysics.Position.x = mapScale * 2
-	playerPhysics.Position.y = mapScale * 2
-	playerPhysics.Rotation = 0.0001
+	playerData.Position.x = mapScale * 2
+	playerData.Position.y = mapScale * 2
+	playerData.Rotation = 0.0001
 
 	angleCalc() /* Update player  movepos */
 
@@ -78,7 +78,7 @@ func main() {
 	rayImg = ebiten.NewImage(miniScale*mapSize.x, miniScale*mapSize.y)
 
 	/* Calculate reasonable max depth */
-	maxDof = shadowDistance
+	maxDof = shadowDistance * 2
 
 	/* Precalc fov values */
 	renderFovRad = degToRad(renderFov)

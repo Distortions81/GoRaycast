@@ -32,16 +32,16 @@ func (g *Game) processInput(screen *ebiten.Image) error {
 			doMelt = -1
 			meltQuit = true
 		case ebiten.KeyW:
-			playerPhysics.Position.x += playerPhysics.MovePos.x / playerForwardSpeedDiv
-			playerPhysics.Position.y += playerPhysics.MovePos.y / playerForwardSpeedDiv
+			playerData.Position.x += playerData.MovePos.x / playerForwardSpeedDiv
+			playerData.Position.y += playerData.MovePos.y / playerForwardSpeedDiv
 		case ebiten.KeyS:
-			playerPhysics.Position.x -= playerPhysics.MovePos.x / playerForwardSpeedDiv
-			playerPhysics.Position.y -= playerPhysics.MovePos.y / playerForwardSpeedDiv
+			playerData.Position.x -= playerData.MovePos.x / playerForwardSpeedDiv
+			playerData.Position.y -= playerData.MovePos.y / playerForwardSpeedDiv
 		case ebiten.KeyD:
-			playerPhysics.Rotation -= frameSpeed
+			playerData.Rotation -= frameSpeed
 			angleCalc() //Update player movepos
 		case ebiten.KeyA:
-			playerPhysics.Rotation += frameSpeed
+			playerData.Rotation += frameSpeed
 			angleCalc() //Update player movepos
 		}
 	}
@@ -49,7 +49,7 @@ func (g *Game) processInput(screen *ebiten.Image) error {
 }
 
 func angleCalc() {
-	playerPhysics.Rotation = fixRad(playerPhysics.Rotation)
-	playerPhysics.MovePos.x = math.Cos(playerPhysics.Rotation)  // opposite
-	playerPhysics.MovePos.y = -math.Sin(playerPhysics.Rotation) // adjacent
+	playerData.Rotation = fixRad(playerData.Rotation)
+	playerData.MovePos.x = math.Cos(playerData.Rotation)  // opposite
+	playerData.MovePos.y = -math.Sin(playerData.Rotation) // adjacent
 }
