@@ -54,6 +54,8 @@ golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 h1:estk1glOnSVeJ9tdEZZc5mAMD
 golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56/go.mod h1:JhuoJpWY28nO4Vef9tZUw9qufEGTyX1+7lmHxV5q5G4=
 golang.org/x/exp/shiny v0.0.0-20221114191408-850992195362 h1:klJAUGTRrnTvp2+ongrNqLxrl/415DPs2iR9xn/k0ME=
 golang.org/x/exp/shiny v0.0.0-20221114191408-850992195362/go.mod h1:VjAR7z0ngyATZTELrBSkxOOHhhlnVUxDye4mcjx5h/8=
+golang.org/x/exp/shiny v0.0.0-20230113152452-c42ee1cf562e h1:nP1RbSNCnzqkfzA0YKYUfbICin82lHiRK3cMT2uvtcQ=
+golang.org/x/exp/shiny v0.0.0-20230113152452-c42ee1cf562e/go.mod h1:UH99kUObWAZkDnWqppdQe5ZhPYESUw8I0zVV1uWBR+0=
 golang.org/x/image v0.0.0-20190227222117-0694c2d4d067/go.mod h1:kZ7UVZpmo3dzQBMxlp+ypCbDeSB+sBbTgSJuh5dn5js=
 golang.org/x/image v0.0.0-20190703141733-d6a02ce849c9/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/image v0.0.0-20190802002840-cff245a6509b/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
